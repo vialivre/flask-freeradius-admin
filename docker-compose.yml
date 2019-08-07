@@ -23,6 +23,18 @@ services:
       - db
     networks:
       - freeradius-admin-network
+  app:
+    build:
+      context: ./flask_app
+      dockerfile: Dockerfile
+    restart: on-failure
+    ports:
+      - "8000:5000"
+    depends_on:
+      - db
+      - freeradius
+    networks:
+      - freeradius-admin-network
 
 networks:
   freeradius-admin-network:
