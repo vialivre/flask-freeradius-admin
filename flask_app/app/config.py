@@ -18,3 +18,5 @@ DB_URI = 'postgresql+psycopg2://{user}:{psswd}@{server}:{port}/{db}'.format(
 class Config(object):
     SQLALCHEMY_DATABASE_URI = DB_URI
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    FLASK_ADMIN_SWATCH = 'cerulean'
