@@ -10,7 +10,10 @@ app.config.from_object(Config)
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-login_manager = LoginManager()
 
-from app.models import auth_models, radius_models
-from app import routes
+login = LoginManager()
+login.init_app(app)
+login.login_view = 'login'
+
+from app.models import auth, radius
+from app.routes import main, auth

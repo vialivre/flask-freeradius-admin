@@ -23,7 +23,7 @@
             <div class="mx-auto app-login-box col-md-8">
               <div class="modal-dialog w-100 mx-auto">
                 <div class="modal-content">
-                  <form class="">
+                  <form method="POST">
                     <div class="modal-body">
                       <div class="h5 modal-title text-center">
                         <h4
@@ -33,21 +33,21 @@
                           <span>Please sign in to your account below.</span>
                         </h4>
                       </div>
-                      {{ login_user_form.csrf_token }}
+                      {{ form.hidden_tag() }}
                       <div class="form-row">
                         <div class="col-md-12">
                           <div class="position-relative form-group">
-                            {{ login_user_form.email(placeholder='Username or email', class='form-control') }}
+                            {{ form.user(placeholder='Username or email', class='form-control') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="position-relative form-group">
-                            {{ login_user_form.password(placeholder='Password', class='form-control') }}
+                            {{ form.password(placeholder='Password', class='form-control') }}
                           </div>
                         </div>
                       </div>
                       <div class="position-relative form-check">
-                        {{ login_user_form.remember(class='form-check-input') }}
+                        {{ form.remember(class='form-check-input') }}
                         <label for="remember" class="form-check-label"
                           >Keep me logged in</label
                         >
@@ -55,14 +55,12 @@
                     </div>
                     <div class="modal-footer clearfix">
                       <div class="float-left">
-                        <a
-                          href="{{ url_for('security.forgot_password') }}"
-                          class="btn-lg btn btn-link"
+                        <a href="#" class="btn-lg btn btn-link"
                           >Recover Password</a
                         >
                       </div>
                       <div class="float-right">
-                        {{ login_user_form.submit(class='btn btn-primary btn-lg', value='Login to Dashboard') }}
+                        {{ form.submit(class='btn btn-primary btn-lg') }}
                       </div>
                     </div>
                   </form>

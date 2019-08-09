@@ -81,7 +81,7 @@
                 <div class="widget-content-wrapper">
                   <div class="widget-content-left  ml-3 header-user-info">
                     <div class="widget-heading">
-                      {{ user.username }}
+                      {{ current_user.username }}
                     </div>
                   </div>
                   <div class="widget-content-right header-user-info ml-3">
@@ -92,7 +92,7 @@
                     </div>
                   </div>
                   <div class="widget-content-right header-user-info ml-3">
-                    <a href="#logout">
+                    <a href="{{ url_for('logout') }}">
                       <button
                         type="button"
                         class="btn-shadow p-1 btn btn-danger btn-sm show-toastr-example"
