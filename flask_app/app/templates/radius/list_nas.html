@@ -28,6 +28,7 @@
           aria-haspopup="true"
           aria-expanded="false"
           class="btn-shadow dropdown-toggle btn btn-info"
+          disabled
         >
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-file-export fa-w-20"></i>
@@ -90,13 +91,13 @@
               <td>{{ record.community }}</td>
               <td>{{ record.description }}</td>
               <td class="table-actions">
-                <a href="#">
+                <a href="{{ url_for('edit_nas', nas_id=record.id) }}">
                   <button class="btn btn-sm btn-warning">
                     <i class="fa fa-edit"></i>
                     <span>Edit</span>
                   </button>
                 </a>
-                <a href="#">
+                <a href="{{ url_for('delete_nas', nas_id=record.id) }}">
                   <button class="btn btn-sm btn-danger">
                     <i class="fa fa-trash-alt"></i>
                     <span>Delete</span>

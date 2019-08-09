@@ -14,10 +14,17 @@
     </div>
     <div class="page-title-actions">
       <button onclick="submitform()" class="btn-shadow btn btn-success">
+        {% if action == 'add' %}
         <span class="btn-icon-wrapper pr-2 opacity-7">
           <i class="fa fa-plus fa-w-20"></i>
         </span>
-        Add
+        <span>Add</span>
+        {% elif action == 'edit' %}
+        <span class="btn-icon-wrapper pr-2 opacity-7">
+          <i class="fa fa-edit fa-w-20"></i>
+        </span>
+        <span>Edit</span>
+        {% endif %}
       </button>
     </div>
   </div>
