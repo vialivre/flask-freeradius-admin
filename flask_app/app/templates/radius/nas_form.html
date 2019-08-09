@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% block header %}
+<div class="app-page-title">
+  <div class="page-title-wrapper">
+    <div class="page-title-heading">
+      <div class="page-title-icon">
+        <i class="fa fa-network-wired icon-gradient bg-happy-itmeo"></i>
+      </div>
+      <div>
+        NAS
+        <div class="page-title-subheading">
+          NAS details and management.
+        </div>
+      </div>
+    </div>
+    <div class="page-title-actions">
+      <button onclick="submitform()" class="btn-shadow btn btn-success">
+        <span class="btn-icon-wrapper pr-2 opacity-7">
+          <i class="fa fa-plus fa-w-20"></i>
+        </span>
+        Add
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block container %}
+<form id="nas-form" method="POST">
+  {{ form.csrf_token }}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="main-card mb-3 card">
+        <div class="card-body">
+          <h5 class="card-title">Main info</h5>
+          <div class="form-group">
+            <label for="name">Name</label>
+            {% if form.errors.get('name') %}
+            {{ form.name(class='form-control is-invalid') }}
+            <div class="invalid-feedback">{{ form_errors.get("name")[0] }}</div>
+            {% else %}
+            {{ form.name(class='form-control') }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="server">Server</label>
+            {% if form.errors.get('server') %}
+            {{ form.server(class='form-control is-invalid') }}
+            <div class="invalid-feedback">
+              {{ form_errors.get("server")[0] }}
+            </div>
+            {% else %}
+            {{ form.server(class='form-control') }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="ports">Ports</label>
+            {% if form.errors.get('ports') %}
+            {{ form.ports(class='form-control is-invalid') }}
+            <div class="invalid-feedback">
+              {{ form_errors.get("ports")[0] }}
+            </div>
+            {% else %}
+            {{ form.ports(class='form-control') }}
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="secret">Secret</label>
+            {% if form.errors.get('secret') %}
+            {{ form.secret(class='form-control is-invalid') }}
+            <div class="invalid-feedback">
+              {{ form_errors.get("secret")[0] }}
+            </div>
+            {% else %}
+            {{ form.secret(class='form-control') }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="main-card mb-3 card">
+        <div class="card-body">
+          <h5 class="card-title">More details</h5>
+          <div class="form-group">
+            <label for="short_name">Short Name</label>
+            {{ form.short_name(class='form-control') }}
+          </div>
+          <div class="form-group">
+            <label for="type">Type</label>
+            {{ form.type(class='form-control') }}
+          </div>
+          <div class="form-group">
+            <label for="community">Community</label>
+            {{ form.community(class='form-control') }}
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            {{ form.description(class='form-control', style="min-height: 120px;") }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %} {% block scripts %}
+<script type="text/javascript">
+  function submitform() {
+    document.getElementById("nas-form").submit();
+  }
+</script>
+{% endblock %}
