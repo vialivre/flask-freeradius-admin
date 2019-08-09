@@ -1,0 +1,8 @@
+.table-heading {
+  text-transform: uppercase;
+}
+
+.no-record-message {
+  text-align: center;
+  margin: 15px 0;
+}

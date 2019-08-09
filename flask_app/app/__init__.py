@@ -16,4 +16,4 @@ login.init_app(app)
 login.login_view = 'login'
 
 from app.models import auth, radius
-from app.routes import main, auth
+from app.routes import main, auth, radius

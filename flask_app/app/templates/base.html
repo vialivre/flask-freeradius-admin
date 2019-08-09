@@ -28,6 +28,10 @@
       href="{{ url_for('static', filename='styles/main.css') }}"
       rel="stylesheet"
     />
+    <link
+      href="{{ url_for('static', filename='styles/custom.css') }}"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div
@@ -136,7 +140,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="{{ url_for('list_nas') }}">
                     <i class="metismenu-icon fa fa-network-wired"></i>
                     NAS
                   </a>
@@ -148,7 +152,8 @@
 
         <div class="app-main__outer">
           <div class="app-main__inner">
-            {% block container %} {% endblock %}
+            {% block header %} {% endblock %} {% block container %} {% endblock
+            %}
           </div>
         </div>
       </div>
