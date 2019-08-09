@@ -33,6 +33,11 @@ services:
     depends_on:
       - db
       - freeradius
+    environment:
+      DATABASE_SERVER: db
+      DATABASE_USER: radius
+      DATABASE_PASSWORD: radpass
+      DATABASE_NAME: radius
     networks:
       - freeradius-admin-network
 
