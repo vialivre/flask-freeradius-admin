@@ -95,6 +95,25 @@
         </table>
         {% if not table_records %}
         <div class="no-record-message">No record found</div>
+        {% else %}
+        <nav aria-label="Table navigation" style="margin: 10px 0;">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{ url_for('list_nas', page=pagination.prev_num if pagination.has_prev else 1) }}"
+                >Previous</a
+              >
+            </li>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{ url_for('list_nas', page=pagination.next_num if pagination.has_next else pagination.page) }}"
+                >Next</a
+              >
+            </li>
+          </ul>
+        </nav>
         {% endif %}
       </div>
     </div>

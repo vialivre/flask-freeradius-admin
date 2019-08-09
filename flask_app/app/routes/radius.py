@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 
 from app.forms.radius import NasForm
 from app.models.radius import Nas
@@ -9,12 +9,14 @@ def list_nas():
     table_headers = ("#", "Name", "Short name", "Server", "Ports",
                      "Secret", "Type", "Community", "Description")
 
-    records = db.session.query(Nas).all()
+    page = int(request.args.get('page', 1))
+    records = db.session.query(Nas).paginate(page=page)
 
     return render_template(
         'radius/list_nas.html',
         table_headers=table_headers,
-        table_records=records
+        table_records=records.items,
+        pagination=records
     )
 
 @app.route('/nas/new', methods=['GET', 'POST'])
