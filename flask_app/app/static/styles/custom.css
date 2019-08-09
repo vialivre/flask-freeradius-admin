@@ -6,3 +6,7 @@
   text-align: center;
   margin: 15px 0;
 }
+
+.table-actions a {
+  margin: 0 5px;
+}

@@ -89,6 +89,20 @@
               <td>{{ record.type }}</td>
               <td>{{ record.community }}</td>
               <td>{{ record.description }}</td>
+              <td class="table-actions">
+                <a href="#">
+                  <button class="btn btn-sm btn-warning">
+                    <i class="fa fa-edit"></i>
+                    <span>Edit</span>
+                  </button>
+                </a>
+                <a href="#">
+                  <button class="btn btn-sm btn-danger">
+                    <i class="fa fa-trash-alt"></i>
+                    <span>Delete</span>
+                  </button>
+                </a>
+              </td>
             </tr>
             {% endfor %}
           </tbody>

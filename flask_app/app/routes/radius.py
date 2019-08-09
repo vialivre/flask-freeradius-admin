@@ -7,7 +7,8 @@ from app.models.radius import Nas
 @app.route('/nas')
 def list_nas():
     table_headers = ("#", "Name", "Short name", "Server", "Ports",
-                     "Secret", "Type", "Community", "Description")
+                     "Secret", "Type", "Community", "Description",
+                     "Actions")
 
     page = int(request.args.get('page', 1))
     records = db.session.query(Nas).paginate(page=page)
