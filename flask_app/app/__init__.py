@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_security import SQLAlchemyUserDatastore, Security
 
 from app.config import Config
 
@@ -8,5 +9,9 @@ app.config.from_object(Config)
 
 db = SQLAlchemy(app)
 
-from app.models import radius_models
+from app.models import auth_models, radius_models
+# setup flask-security
+user_datastore = SQLAlchemyUserDatastore(db, auth_models.User, auth_models.Role)
+security = Security(app, user_datastore)
+
 from app import routes
