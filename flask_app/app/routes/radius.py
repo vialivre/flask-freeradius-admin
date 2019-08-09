@@ -6,13 +6,15 @@ from app.models.radius import Nas
 
 @app.route('/nas')
 def list_nas():
-    table_headers = ("#", "Name", "Short name", "Type", "Ports",
-                     "Secret", "Server", "Community", "Description")
+    table_headers = ("#", "Name", "Short name", "Server", "Ports",
+                     "Secret", "Type", "Community", "Description")
+
+    records = db.session.query(Nas).all()
 
     return render_template(
         'radius/list_nas.html',
         table_headers=table_headers,
-        table_records=[]
+        table_records=records
     )
 
 @app.route('/nas/new', methods=['GET', 'POST'])
