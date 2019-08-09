@@ -12,11 +12,9 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(255))
     phone = db.Column(db.String(50))
     address = db.Column(db.Text)
-    
 
-
-    def set_password(self, password):
-        self.password = generate_password_hash(password)
+    def hash_password(self):
+        self.password = generate_password_hash(self.password)
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
