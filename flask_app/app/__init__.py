@@ -10,5 +10,5 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 admin = Admin(app)
 
-from app import radius_models
+from app.models import radius_models
 from app import routes
