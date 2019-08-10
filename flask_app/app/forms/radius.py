@@ -9,10 +9,12 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired
 
-from app.utils import read_vendors
+from app.utils import OPERATORS, read_vendors
+
+DICTIONARIES_PATH = app.config.get('DICTIONARIES_PATH')
 
 class NasForm(FlaskForm):
-    VENDORS = read_vendors(app.config.get('DICTIONARIES_PATH'))
+    VENDORS = read_vendors(DICTIONARIES_PATH)
 
     name = StringField('Name', validators=[DataRequired()])
     server = StringField('Server', validators=[DataRequired()])
@@ -30,3 +32,19 @@ class GroupForm(FlaskForm):
     name = StringField('Group Name', validators=[DataRequired()])
     description = TextAreaField('Description')
     submit = SubmitField('Submit')
+
+
+class AttributeForm(FlaskForm):
+    VENDORS = read_vendors(DICTIONARIES_PATH)
+
+    vendor = SelectField(
+        'Vendor', choices=VENDORS or [], 
+        validators=[DataRequired()], id='vendor_field'
+    )
+    attribute = SelectField(
+        'Attribute', choices=[],
+        validators=[DataRequired()], id='attribute_field'
+    )
+    custom_attribute = StringField('Attribute')
+    operation = SelectField('Operation', choices=OPERATORS, validators=[DataRequired()])
+    value = StringField('Value', validators=[DataRequired()])

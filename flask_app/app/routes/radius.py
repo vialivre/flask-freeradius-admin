@@ -1,12 +1,20 @@
+import os
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request
+from flask import (
+    render_template, flash, redirect,
+    url_for, request, jsonify
+)
 from flask_login import login_required
 
-from app.forms.radius import NasForm, GroupForm
+from app.forms.radius import (
+    NasForm, GroupForm, AttributeForm
+)
 from app.models.radius import (
     Nas, RadUserGroup, RadGroupCheck, RadGroupReply
 )
 from app.models.auth import Group
+
+from app.utils import read_dictionary
 
 # NAS pages
 @app.route('/nas')
@@ -195,3 +203,33 @@ def group_details(group_id):
         checks=checks,
         replies=replies
     )
+
+@app.route('/groups/<int:group_id>/checks/new')
+@login_required
+def new_group_check(group_id):
+    group = Group.query.get_or_404(group_id)
+    form = AttributeForm()
+
+    return render_template(
+        'radius/group_attribute_form.html',
+        group=group,
+        form=form,
+        form_errors=form.errors,
+        type='check'
+    )
+
+@app.route('/_filter_attributes')
+@login_required
+def _filter_attributes():
+    dict_path = app.config.get('DICTIONARIES_PATH')
+    vendor = request.args.get('vendor')
+    if not vendor:
+        return jsonify([])
+
+    dict_data = read_dictionary(
+        os.path.join(dict_path, 'dictionary.' + vendor)
+    )
+    attributes = [(d['name'], d['name']) for d in dict_data['attributes']]
+    attributes.append(('Custom', 'Custom'))
+
+    return jsonify(attributes) if dict_data else jsonify([])
