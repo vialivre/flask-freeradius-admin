@@ -40,8 +40,8 @@ services:
       - freeradius
     environment:
       DATABASE_SERVER: db
-      DATABASE_USER: radius
-      DATABASE_PASSWORD: radpass
+      DATABASE_USER: admin
+      DATABASE_PASSWORD: admin
       DATABASE_NAME: radius
     networks:
       - freeradius-admin-network
