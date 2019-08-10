@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required
 
-from app.forms.radius import NasForm
+from app.forms.radius import NasForm, GroupForm
 from app.models.radius import Nas, RadUserGroup
 from app.models.auth import Group
 
@@ -112,4 +112,27 @@ def list_groups():
         table_headers=table_headers,
         table_records=records.items,
         pagination=records
+    )
+
+@app.route('/groups/new', methods=['GET', 'POST'])
+@login_required
+def new_group():
+    form = GroupForm()
+
+    if form.validate_on_submit():
+        db.session.add(Group(
+            name=form.name.data,
+            description=form.description.data
+        ))
+        db.session.commit()
+        flash('New group added')
+        return redirect(url_for('list_groups'))
+    elif form.errors:
+        flash('Form has errors')
+
+    return render_template(
+        'radius/group_form.html',
+        form=form,
+        form_errors=form.errors,
+        action='add'
     )

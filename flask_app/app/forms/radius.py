@@ -24,3 +24,9 @@ class NasForm(FlaskForm):
     community = StringField('Community')
     description = TextAreaField('Description')
     submit = SubmitField('Submit')
+
+
+class GroupForm(FlaskForm):
+    name = StringField('Group Name', validators=[DataRequired()])
+    description = TextAreaField('Description')
+    submit = SubmitField('Submit')
