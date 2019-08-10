@@ -18,5 +18,7 @@ DB_URI = 'postgresql+psycopg2://{user}:{psswd}@{server}:{port}/{db}'.format(
 class Config(object):
     SECRET_KEY = os.getenv('SECRET_KEY', 'flask-freeradius-admin-secret')
 
+    DICTIONARIES_PATH = os.getenv('DICTIONARIES_PATH', '/usr/share/freeradius')
+
     SQLALCHEMY_DATABASE_URI = DB_URI
     SQLALCHEMY_TRACK_MODIFICATIONS = False
