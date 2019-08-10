@@ -1,4 +1,4 @@
-version: "3"
+version: "3.2"
 
 services:
   db:
@@ -23,6 +23,11 @@ services:
       - db
     networks:
       - freeradius-admin-network
+    volumes:
+      - type: volume
+        source: dictionaries
+        target: /usr/share/freeradius
+        read_only: true
   app:
     build:
       context: ./flask_app
@@ -40,6 +45,14 @@ services:
       DATABASE_NAME: radius
     networks:
       - freeradius-admin-network
+    volumes:
+      - type: volume
+        source: dictionaries
+        target: /usr/share/freeradius
+        read_only: true
 
 networks:
   freeradius-admin-network:
+
+volumes:
+  dictionaries:
