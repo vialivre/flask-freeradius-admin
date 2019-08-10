@@ -148,3 +148,36 @@ def new_group():
         form_errors=form.errors,
         action='add'
     )
+
+@app.route('/groups/edit/<int:group_id>', methods=['GET', 'POST'])
+@login_required
+def edit_group(group_id):
+    group = Group.query.get_or_404(group_id)
+    form = GroupForm()
+
+    if form.validate_on_submit():
+        group.name = form.name.data
+        group.description = form.description.data
+        db.session.commit()
+        flash('Group data updated')
+        return redirect(url_for('list_groups'))
+    elif form.errors:
+        flash('Form has errors')
+    elif request.method == 'GET':
+        form.name.data = group.name
+        form.description.data = group.description
+    
+    return render_template(
+        'radius/group_form.html',
+        form=form,
+        form_errors=form.errors,
+        action='edit'
+    )
+
+@app.route('/groups/delete/<int:group_id>')
+@login_required
+def delete_group(group_id):
+    group = Group.query.get_or_404(group_id)
+    db.session.delete(group)
+    db.session.commit()
+    return redirect(url_for('list_groups'))
