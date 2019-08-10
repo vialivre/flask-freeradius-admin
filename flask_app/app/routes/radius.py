@@ -181,3 +181,17 @@ def delete_group(group_id):
     db.session.delete(group)
     db.session.commit()
     return redirect(url_for('list_groups'))
+
+# Group checks and replies pages
+@app.route('/groups/<int:group_id>')
+@login_required
+def group_details(group_id):
+    group = Group.query.get_or_404(group_id)
+    checks = db.session.query(RadGroupCheck).all()
+    replies = db.session.query(RadGroupReply).all()
+    return render_template(
+        'radius/group_details.html',
+        group=group,
+        checks=checks,
+        replies=replies
+    )

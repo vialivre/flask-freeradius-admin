@@ -87,7 +87,7 @@
               <td>{{ record.checks }}</td>
               <td>{{ record.replies }}</td>
               <td class="table-actions">
-                <a href="#">
+                <a href="{{ url_for('group_details', group_id=record.id) }}">
                   <button class="btn btn-sm btn-info">
                     <i class="fa fa-info-circle"></i>
                     <span>Details</span>
