@@ -3,7 +3,9 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required
 
 from app.forms.radius import NasForm, GroupForm
-from app.models.radius import Nas, RadUserGroup
+from app.models.radius import (
+    Nas, RadUserGroup, RadGroupCheck, RadGroupReply
+)
 from app.models.auth import Group
 
 # NAS pages
@@ -102,10 +104,20 @@ def delete_nas(nas_id):
 @app.route('/groups')
 @login_required
 def list_groups():
-    table_headers = ("#", "Group Name", "Description", "Actions")
+    table_headers = ("#", "Group Name", "Description",
+                     "Checks Count", "Replies Count",
+                     "Actions")
 
     page = int(request.args.get('page', 1))
     records = Group.query.paginate(page=page)
+    
+    for record in records.items:
+        record.checks = db.session.query(RadGroupCheck).filter_by(
+            groupname=record.name
+        ).count()
+        record.replies = db.session.query(RadGroupReply).filter_by(
+            groupname=record.name
+        ).count()
 
     return render_template(
         'radius/list_groups.html',
