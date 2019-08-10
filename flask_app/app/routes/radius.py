@@ -3,8 +3,10 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_required
 
 from app.forms.radius import NasForm
-from app.models.radius import Nas
+from app.models.radius import Nas, RadUserGroup
+from app.models.auth import Group
 
+# NAS pages
 @app.route('/nas')
 @login_required
 def list_nas():
@@ -95,3 +97,19 @@ def delete_nas(nas_id):
     db.session.delete(nas)
     db.session.commit()
     return redirect(url_for('list_nas'))
+
+# Groups pages
+@app.route('/groups')
+@login_required
+def list_groups():
+    table_headers = ("#", "Group Name", "Description", "Actions")
+
+    page = int(request.args.get('page', 1))
+    records = Group.query.paginate(page=page)
+
+    return render_template(
+        'radius/list_groups.html',
+        table_headers=table_headers,
+        table_records=records.items,
+        pagination=records
+    )

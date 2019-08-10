@@ -2,7 +2,7 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-DATABASE_SERVER = os.getenv('DATABASE_SERVER')
+DATABASE_SERVER = os.getenv('DATABASE_SERVER', 'localhost')
 DATABASE_PORT = os.getenv('DATABASE_PORT', '5432')
 DATABASE_USER = os.getenv('DATABASE_USER')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')

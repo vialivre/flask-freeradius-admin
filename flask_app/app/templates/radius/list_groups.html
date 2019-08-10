@@ -1,0 +1,131 @@
+{% extends 'base.html' %} {% block header %}
+<div class="app-page-title">
+  <div class="page-title-wrapper">
+    <div class="page-title-heading">
+      <div class="page-title-icon">
+        <i class="fa fa-network-wired icon-gradient bg-happy-itmeo"></i>
+      </div>
+      <div>
+        Groups
+        <div class="page-title-subheading">
+          Groups details and management.
+        </div>
+      </div>
+    </div>
+    <div class="page-title-actions">
+      <a href="#">
+        <button type="button" class="btn-shadow btn btn-success">
+          <span class="btn-icon-wrapper pr-2 opacity-7">
+            <i class="fa fa-plus fa-w-20"></i>
+          </span>
+          Add
+        </button>
+      </a>
+      <div class="d-inline-block dropdown">
+        <button
+          type="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+          class="btn-shadow dropdown-toggle btn btn-info"
+          disabled
+        >
+          <span class="btn-icon-wrapper pr-2 opacity-7">
+            <i class="fa fa-file-export fa-w-20"></i>
+          </span>
+          Export
+        </button>
+        <div
+          tabindex="-1"
+          role="menu"
+          aria-hidden="true"
+          class="dropdown-menu dropdown-menu-right"
+        >
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a href="javascript:void(0);" class="nav-link">
+                <i class="nav-link-icon fa fa-file-csv"></i>
+                <span>
+                  CSV
+                </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="javascript:void(0);" class="nav-link">
+                <i class="nav-link-icon fa fa-file-code"></i>
+                <span>
+                  JSON
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block container %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="main-card mb-3 card">
+      <div class="card-body">
+        <h5 class="card-title">Groups Details</h5>
+        <table class="mb-0 table table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              {% for header in table_headers %}
+              <th class="table-heading">{{ header }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in table_records %}
+            <tr>
+              <td>{{ record.id }}</td>
+              <td>{{ record.name }}</td>
+              <td>{{ record.description }}</td>
+              <td class="table-actions">
+                <a href="#">
+                  <button class="btn btn-sm btn-warning">
+                    <i class="fa fa-edit"></i>
+                    <span>Edit</span>
+                  </button>
+                </a>
+                <a href="#">
+                  <button class="btn btn-sm btn-danger">
+                    <i class="fa fa-trash-alt"></i>
+                    <span>Delete</span>
+                  </button>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if not table_records %}
+        <div class="no-record-message">No record found</div>
+        {% else %}
+        <nav aria-label="Table navigation" style="margin: 10px 0;">
+          <ul class="pagination justify-content-center">
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{ url_for('list_groups', page=pagination.prev_num if pagination.has_prev else 1) }}"
+                >Previous</a
+              >
+            </li>
+            <li class="page-item">
+              <a
+                class="page-link"
+                href="{{ url_for('list_groups', page=pagination.next_num if pagination.has_next else pagination.page) }}"
+                >Next</a
+              >
+            </li>
+          </ul>
+        </nav>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
