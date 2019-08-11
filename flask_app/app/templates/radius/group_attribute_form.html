@@ -74,6 +74,7 @@
                 <label for="custom_value_field">Value</label>
                 {{ form.custom_value(class='form-control') }}
               </div>
+              {{ form.processed_fields() }}
             </div>
           </div>
         </div>
@@ -91,6 +92,8 @@
     vendor: $("#vendor_field"),
     attribute: $("#attribute_field")
   };
+
+  var proc_fields_field = $("#proc_fields");
 
   updateAttributes();
   updateValues();
@@ -132,6 +135,7 @@
       customAttributeBlock.show();
       valueBlock.hide();
       customValueBlock.show();
+      proc_fields_field.val("ca-cv");
     } else {
       customAttributeBlock.hide();
       valueBlock.hide();
@@ -146,10 +150,12 @@
         if (!data.length) {
           valueBlock.hide();
           customValueBlock.show();
+          proc_fields_field.val("sa-cv");
         } else {
           value.empty();
           valueBlock.show();
           customValueBlock.hide();
+          proc_fields_field.val("sa-sv");
 
           value.append(
             $("<option>", {

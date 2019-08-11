@@ -5,13 +5,20 @@ from wtforms import (
     TextAreaField,
     SubmitField,
     IntegerField,
-    SelectField
+    SelectField,
+    HiddenField
 )
 from wtforms.validators import DataRequired
 
 from app.utils import OPERATORS, read_vendors
 
 DICTIONARIES_PATH = app.config.get('DICTIONARIES_PATH')
+
+class NoValidationSelectField(SelectField):
+    def pre_validate(self, form):
+        return True
+    def post_validate(self, form, validation_stopped):
+        return True
 
 class NasForm(FlaskForm):
     VENDORS = read_vendors(DICTIONARIES_PATH)
@@ -37,9 +44,12 @@ class GroupForm(FlaskForm):
 class AttributeForm(FlaskForm):
     VENDORS = read_vendors(DICTIONARIES_PATH)
 
-    vendor = SelectField('Vendor', choices=VENDORS or [], id='vendor_field')
+    vendor = NoValidationSelectField(
+        'Vendor', choices=VENDORS or [],
+        id='vendor_field'
+    )
     
-    attribute = SelectField(
+    attribute = NoValidationSelectField(
         'Attribute', choices=[],
         validators=[DataRequired()], id='attribute_field'
     )
@@ -50,5 +60,10 @@ class AttributeForm(FlaskForm):
         validators=[DataRequired()]
     )
     
-    value = SelectField('Value', choices=[], id='value_field')
+    value = NoValidationSelectField('Value', choices=[], id='value_field')
     custom_value = StringField('Value', id='custom_value_field')
+
+    processed_fields = HiddenField(
+        'Processed Fields', id='proc_fields',
+        default='ca-cv'
+    )

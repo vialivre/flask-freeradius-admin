@@ -204,11 +204,46 @@ def group_details(group_id):
         replies=replies
     )
 
-@app.route('/groups/<int:group_id>/checks/new')
+@app.route('/groups/<int:group_id>/checks/new', methods=['GET', 'POST'])
 @login_required
 def new_group_check(group_id):
     group = Group.query.get_or_404(group_id)
     form = AttributeForm()
+
+    if form.validate_on_submit():
+        data_type = form.processed_fields.data
+
+        if data_type == 'ca-cv':
+            db.session.add(RadGroupCheck(
+                groupname=group.name,
+                attribute=form.custom_attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-cv':
+            db.session.add(RadGroupCheck(
+                groupname=group.name,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-sv':
+            db.session.add(RadGroupCheck(
+                groupname=group.name,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.value.data
+            ))
+            db.session.commit()
+        else:
+            flash('Unable to process attribute')
+            return redirect(url_for('new_group_check', group_id=group_id))
+        return redirect(url_for('group_details', group_id=group_id))
+    elif form.errors:
+        print(form.errors)
+        flash('Form has errors')
 
     return render_template(
         'radius/group_attribute_form.html',
@@ -245,8 +280,10 @@ def _filter_values():
     dict_data = read_dictionary(
         os.path.join(dict_path, 'dictionary.' + vendor)
     )
-    values = [(d['name'], d['name']) for d in dict_data['values']
-                                     if d['attribute'] == attribute]
+    if dict_data:
+        values = [(d['name'], d['name']) for d in dict_data['values'] 
+                                        if d['attribute'] == attribute]
+    else:
+        values = []
 
-    return jsonify(sorted(values, key=lambda v: v[1])) \
-                    if dict_data else jsonify([])
+    return jsonify(sorted(values, key=lambda v: v[1]))

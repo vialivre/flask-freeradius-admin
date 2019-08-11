@@ -27,7 +27,9 @@ def read_vendors(dict_folder_path):
             vendor = '-'.join([fp.capitalize() for fp in filename_parts])
             vendors.append(('.'.join(filename_parts), vendor))
     vendors.append(('others', 'Others'))
-    return list(filter(lambda v: v[1] != '', vendors))
+    return sorted(list(
+        filter(lambda v: v[1] != '', vendors)
+    ), lambda v: v[1])
 
 def read_dictionary(dict_path):
     if not os.path.isfile(dict_path):
