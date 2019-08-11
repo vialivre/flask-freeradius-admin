@@ -10,9 +10,10 @@ from app.forms.radius import (
     NasForm, GroupForm, AttributeForm
 )
 from app.models.radius import (
-    Nas, RadUserGroup, RadGroupCheck, RadGroupReply
+    Nas, RadUserGroup, RadGroupCheck, RadGroupReply,
+    RadCheck, RadReply
 )
-from app.models.auth import Group
+from app.models.auth import Group, User
 
 from app.utils import read_dictionary
 
@@ -369,3 +370,39 @@ def delete_group_reply(group_id, group_reply_id):
     db.session.delete(group_reply)
     db.session.commit()
     return redirect(url_for('group_details', group_id=group_id))
+
+# Users pages
+@app.route('/users')
+@login_required
+def list_users():
+    table_headers = ("#", "Username", "Group",
+                     "Checks Count", "Replies Count",
+                     "Status", "Actions")
+
+    page = int(request.args.get('page', 1))
+    records = User.query.paginate(page=page)
+    
+    for record in records.items:
+        user_group = db.session.query(RadUserGroup).filter_by(
+            username=record.username
+        ).first()
+        if user_group:
+            record.group = Group.query.filter_by(
+                name=user_group.groupname
+            ).first()
+        else:
+            record.group = None
+        
+        record.checks = db.session.query(RadCheck).filter_by(
+            username=record.username
+        ).count()
+        record.replies = db.session.query(RadReply).filter_by(
+            username=record.username
+        ).count()
+
+    return render_template(
+        'radius/list_users.html',
+        table_headers=table_headers,
+        table_records=records.items,
+        pagination=records
+    )
