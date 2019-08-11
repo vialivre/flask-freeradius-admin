@@ -416,12 +416,25 @@ def new_user():
             phone=form.phone.data,
             address=form.address.data
         ))
-        db.session.commit()
 
         db.session.add(RadUserGroup(
             username=form.username.data,
             groupname=form.group.data,
             priority=0
+        ))
+        
+        db.session.add(RadCheck(
+            username=form.username.data,
+            attribute='Profile-Name',
+            op=':=',
+            value=form.group.data
+        ))
+
+        db.session.add(RadCheck(
+            username=form.username.data,
+            attribute='Cleartext-Password',
+            op=':=',
+            value=form.password.data
         ))
         db.session.commit()
 
@@ -464,12 +477,24 @@ def edit_user(user_id):
         if len(form.password.data):
             user.password = form.password.data
             user.hash_password()
+            
+            pass_att = db.session.query(RadCheck).filter(
+                RadCheck.username == user.username,
+                RadCheck.attribute == 'Cleartext-Password'
+            ).first()
+            pass_att.value = form.password.data
 
         if not group and form.group.data:
             db.session.add(RadUserGroup(
                 username=form.username.data,
                 groupname=form.group.data,
                 priority=0
+            ))
+            db.session.add(RadCheck(
+                username=form.username.data,
+                attribute='Profile-Name',
+                op=':=',
+                value=form.group.data
             ))
         elif group and group.name != form.group.data:
             db.session.delete(group)
@@ -478,6 +503,11 @@ def edit_user(user_id):
                 groupname=form.group.data,
                 priority=0
             ))
+            group_attr = db.session.query(RadCheck).filter(
+                RadCheck.username == user.username,
+                RadCheck.attribute == 'Profile-Name'
+            ).first()
+            group_attr.value = form.group.data
 
         db.session.commit()
 
@@ -513,6 +543,18 @@ def delete_user(user_id):
     ).first()
     if user_group:
         db.session.delete(user_group)
+
+    user_checks = db.session.query(RadCheck).filter_by(
+        username=user.username
+    ).all()
+    for check in user_checks:
+        db.session.delete(check)
+
+    user_replies = db.session.query(RadReply).filter_by(
+        username=user.username
+    ).all()
+    for reply in user_replies:
+        db.session.delete(reply)
 
     db.session.commit()
     return redirect(url_for('list_users'))
@@ -648,14 +690,16 @@ def new_user_reply(user_id):
 @login_required
 def delete_user_check(user_id, user_check_id):
     user_check = db.session.query(RadCheck).get_or_404(user_check_id)
-    db.session.delete(user_check)
-    db.session.commit()
+    if not user_check.attribute in ['Cleartext-Password', 'Profile-Name']:
+        db.session.delete(user_check)
+        db.session.commit()
     return redirect(url_for('user_details', user_id=user_id))
 
 @app.route('/users/<int:user_id>/replies/<int:user_reply_id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_user_reply(user_id, user_reply_id):
     user_reply = db.session.query(RadReply).get_or_404(user_reply_id)
-    db.session.delete(user_reply)
-    db.session.commit()
+    if not user_reply.attribute in ['Cleartext-Password', 'Profile-Name']:
+        db.session.delete(user_reply)
+        db.session.commit()
     return redirect(url_for('user_details', user_id=user_id))
