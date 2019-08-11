@@ -253,6 +253,55 @@ def new_group_check(group_id):
         type='check'
     )
 
+@app.route('/groups/<int:group_id>/replies/new', methods=['GET', 'POST'])
+@login_required
+def new_group_reply(group_id):
+    group = Group.query.get_or_404(group_id)
+    form = AttributeForm()
+
+    if form.validate_on_submit():
+        data_type = form.processed_fields.data
+
+        if data_type == 'ca-cv':
+            db.session.add(RadGroupReply(
+                groupname=group.name,
+                attribute=form.custom_attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-cv':
+            db.session.add(RadGroupReply(
+                groupname=group.name,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-sv':
+            db.session.add(RadGroupReply(
+                groupname=group.name,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.value.data
+            ))
+            db.session.commit()
+        else:
+            flash('Unable to process attribute')
+            return redirect(url_for('new_group_reply', group_id=group_id))
+        return redirect(url_for('group_details', group_id=group_id))
+    elif form.errors:
+        print(form.errors)
+        flash('Form has errors')
+
+    return render_template(
+        'radius/group_attribute_form.html',
+        group=group,
+        form=form,
+        form_errors=form.errors,
+        type='reply'
+    )
+
 @app.route('/_filter_attributes')
 @login_required
 def _filter_attributes():

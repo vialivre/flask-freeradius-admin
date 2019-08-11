@@ -131,7 +131,10 @@
           <span>Reply Attributes</span>
         </div>
         <div class="btn-actions-pane-right">
-          <a href="" class="btn btn-success btn-sm">
+          <a
+            href="{{ url_for('new_group_reply', group_id=group.id) }}"
+            class="btn btn-success btn-sm"
+          >
             <span class="btn-icon-wrapper pr-2 opacity-7">
               <i class="fa fa-plus fa-w-20"></i>
             </span>
