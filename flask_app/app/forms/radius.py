@@ -6,9 +6,13 @@ from wtforms import (
     SubmitField,
     IntegerField,
     SelectField,
-    HiddenField
+    HiddenField,
+    PasswordField,
+    BooleanField
 )
 from wtforms.validators import DataRequired
+
+from app.models.auth import Group
 
 from app.utils import OPERATORS, read_vendors
 
@@ -39,6 +43,21 @@ class GroupForm(FlaskForm):
     name = StringField('Group Name', validators=[DataRequired()])
     description = TextAreaField('Description')
     submit = SubmitField('Submit')
+
+
+class UserForm(FlaskForm):
+    groups = Group.query.all()
+
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email')
+    password = PasswordField('Password')
+    active = BooleanField('Active', default=True)
+    group = SelectField('Group', choices=[
+        (group.name, group.name) for group in groups
+    ])
+    name = StringField('Name')
+    phone = StringField('Phone')
+    address = TextAreaField('Address')
 
 
 class AttributeForm(FlaskForm):

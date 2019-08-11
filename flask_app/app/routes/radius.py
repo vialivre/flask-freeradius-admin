@@ -7,7 +7,8 @@ from flask import (
 from flask_login import login_required
 
 from app.forms.radius import (
-    NasForm, GroupForm, AttributeForm
+    NasForm, GroupForm, AttributeForm,
+    UserForm
 )
 from app.models.radius import (
     Nas, RadUserGroup, RadGroupCheck, RadGroupReply,
@@ -405,4 +406,40 @@ def list_users():
         table_headers=table_headers,
         table_records=records.items,
         pagination=records
+    )
+
+@app.route('/users/new', methods=['GET', 'POST'])
+@login_required
+def new_user():
+    form = UserForm()
+
+    if form.validate_on_submit():
+        db.session.add(User(
+            username=form.username.data,
+            email=form.email.data,
+            password=form.password.data,
+            active=form.active.data,
+            name=form.name.data,
+            phone=form.phone.data,
+            address=form.address.data
+        ))
+        db.session.commit()
+
+        db.session.add(RadUserGroup(
+            username=form.username.data,
+            groupname=form.group.data,
+            priority=0
+        ))
+        db.session.commit()
+
+        return redirect(url_for('list_users'))
+    elif form.errors:
+        print(form.errors)
+        flash('Form has errors')
+
+    return render_template(
+        'radius/user_form.html',
+        form=form,
+        form_errors=form.errors,
+        action='add'
     )

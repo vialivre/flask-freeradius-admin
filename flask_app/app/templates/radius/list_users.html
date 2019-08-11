@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="page-title-actions">
-      <a href="#">
+      <a href="{{ url_for('new_user') }}">
         <button type="button" class="btn-shadow btn btn-success">
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-plus fa-w-20"></i>
@@ -91,9 +91,15 @@
               <td>{{ record.checks }}</td>
               <td>{{ record.replies }}</td>
               {% if record.active %}
-              <td class="table-success">ACTIVE</td>
+              <td class="table-success">
+                <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
+                <span>ACTIVE</span>
+              </td>
               {% else %}
-              <td class="table-danger">DISABLED</td>
+              <td class="table-danger">
+                <i class="fa fa-ban" style="margin-right: 5px;"></i>
+                DISABLED
+              </td>
               {% endif %}
               <td class="table-actions">
                 <a href="#">
