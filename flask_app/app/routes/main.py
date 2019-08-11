@@ -6,7 +6,8 @@ from flask_login import login_required
 
 from app.models.auth import User, Group
 from app.models.radius import (
-    RadGroupCheck, RadGroupReply, RadUserGroup
+    RadGroupCheck, RadGroupReply, RadUserGroup,
+    RadCheck
 )
 
 from app.utils import read_dictionary
@@ -17,22 +18,34 @@ def setup():
     if not User.query.count():
         admin = User(
             username='admin', password='admin',
-            name='Administrative User'
+            name='Administrative User', has_access=True
         )
         admin.hash_password()
         db.session.add(admin)
+
+        db.session.add(RadCheck(
+            username='admin',
+            attribute='Cleartext-Password',
+            op=':=',
+            value='admin'
+        ))
         db.session.commit()
 
     # create default users groups
     if not Group.query.count():
         db.session.add(Group(name='user', description='Default user group'))
-        db.session.add(Group(name='admin', description='Admin user group'))
-        db.session.commit()
 
         # create default parameters for groups
-        db.session.add(
-            RadUserGroup(username='admin', groupname='admin', priority=1)
-        )
+        db.session.add(RadUserGroup(
+            username='admin', groupname='user', priority=1
+        ))
+
+        db.session.add(RadCheck(
+            username='admin',
+            attribute='Profile-Name',
+            op=':=',
+            value='user'
+        ))
         db.session.commit()
 
 @app.route('/_filter_attributes')

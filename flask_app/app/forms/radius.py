@@ -52,6 +52,7 @@ class UserForm(FlaskForm):
     name = StringField('Name')
     phone = StringField('Phone')
     address = TextAreaField('Address')
+    has_access = BooleanField('Can login into this system?', default=False)
 
 
 class AttributeForm(FlaskForm):

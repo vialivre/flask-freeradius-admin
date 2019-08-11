@@ -3,7 +3,6 @@ from flask import (
     render_template, flash, redirect,
     url_for, request
 )
-from flask_login import login_required
 
 from app.forms.radius import (
     NasForm, GroupForm, AttributeForm,
@@ -14,10 +13,11 @@ from app.models.radius import (
     RadCheck, RadReply, RadPostAuth
 )
 from app.models.auth import Group, User
+from app.utils import has_access
 
 # Dashboard
 @app.route('/')
-@login_required
+@has_access()
 def index():
     auth_info = db.session.query(RadPostAuth).limit(10).all()
 
@@ -28,7 +28,7 @@ def index():
 
 # NAS pages
 @app.route('/nas')
-@login_required
+@has_access()
 def list_nas():
     table_headers = ("#", "Name", "Short name", "Server", "Ports",
                      "Secret", "Type", "Community", "Description",
@@ -45,7 +45,7 @@ def list_nas():
     )
 
 @app.route('/nas/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_nas():
     form = NasForm()
 
@@ -74,7 +74,7 @@ def new_nas():
     )
 
 @app.route('/nas/edit/<int:nas_id>', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def edit_nas(nas_id):
     nas = db.session.query(Nas).get_or_404(nas_id)
     form = NasForm()
@@ -111,7 +111,7 @@ def edit_nas(nas_id):
     )
 
 @app.route('/nas/delete/<int:nas_id>')
-@login_required
+@has_access()
 def delete_nas(nas_id):
     nas = db.session.query(Nas).get_or_404(nas_id)
     db.session.delete(nas)
@@ -120,7 +120,7 @@ def delete_nas(nas_id):
 
 # Groups pages
 @app.route('/groups')
-@login_required
+@has_access()
 def list_groups():
     table_headers = ("#", "Group Name", "Description",
                      "Checks Count", "Replies Count",
@@ -145,7 +145,7 @@ def list_groups():
     )
 
 @app.route('/groups/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_group():
     form = GroupForm()
 
@@ -168,7 +168,7 @@ def new_group():
     )
 
 @app.route('/groups/edit/<int:group_id>', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def edit_group(group_id):
     group = Group.query.get_or_404(group_id)
     form = GroupForm()
@@ -193,7 +193,7 @@ def edit_group(group_id):
     )
 
 @app.route('/groups/delete/<int:group_id>')
-@login_required
+@has_access()
 def delete_group(group_id):
     group = Group.query.get_or_404(group_id)
     db.session.delete(group)
@@ -221,7 +221,7 @@ def delete_group(group_id):
 
 # Group checks and replies pages
 @app.route('/groups/<int:group_id>')
-@login_required
+@has_access()
 def group_details(group_id):
     group = Group.query.get_or_404(group_id)
 
@@ -251,7 +251,7 @@ def group_details(group_id):
     )
 
 @app.route('/groups/<int:group_id>/checks/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_group_check(group_id):
     group = Group.query.get_or_404(group_id)
     form = AttributeForm()
@@ -299,7 +299,7 @@ def new_group_check(group_id):
     )
 
 @app.route('/groups/<int:group_id>/replies/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_group_reply(group_id):
     group = Group.query.get_or_404(group_id)
     form = AttributeForm()
@@ -347,7 +347,7 @@ def new_group_reply(group_id):
     )
 
 @app.route('/groups/<int:group_id>/checks/<int:group_check_id>/delete', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def delete_group_check(group_id, group_check_id):
     group_check = db.session.query(RadGroupCheck).get_or_404(group_check_id)
     db.session.delete(group_check)
@@ -355,7 +355,7 @@ def delete_group_check(group_id, group_check_id):
     return redirect(url_for('group_details', group_id=group_id))
 
 @app.route('/groups/<int:group_id>/replies/<int:group_reply_id>/delete', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def delete_group_reply(group_id, group_reply_id):
     group_reply = db.session.query(RadGroupReply).get_or_404(group_reply_id)
     db.session.delete(group_reply)
@@ -364,11 +364,11 @@ def delete_group_reply(group_id, group_reply_id):
 
 # Users pages
 @app.route('/users')
-@login_required
+@has_access()
 def list_users():
     table_headers = ("#", "Username", "Group",
                      "Checks Count", "Replies Count",
-                     "Status", "Actions")
+                     "Status", "Access", "Actions")
 
     page = int(request.args.get('page', 1))
     records = User.query.paginate(page=page)
@@ -399,7 +399,7 @@ def list_users():
     )
 
 @app.route('/users/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_user():
     groups = Group.query.all()
     
@@ -407,15 +407,18 @@ def new_user():
     form.group.choices = [(group.name, group.name) for group in groups]
 
     if form.validate_on_submit():
-        db.session.add(User(
+        user = User(
             username=form.username.data,
             email=form.email.data,
             password=form.password.data,
             active=form.active.data,
             name=form.name.data,
             phone=form.phone.data,
-            address=form.address.data
-        ))
+            address=form.address.data,
+            has_access=form.has_access.data
+        )
+        user.hash_password()
+        db.session.add(user)
 
         db.session.add(RadUserGroup(
             username=form.username.data,
@@ -450,7 +453,7 @@ def new_user():
     )
 
 @app.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def edit_user(user_id):
     user = User.query.get_or_404(user_id)
     user_group = db.session.query(RadUserGroup).filter_by(
@@ -473,6 +476,7 @@ def edit_user(user_id):
         user.name = form.name.data
         user.phone = form.phone.data
         user.address = form.address.data
+        user.has_access = form.has_access.data
         
         if len(form.password.data):
             user.password = form.password.data
@@ -521,6 +525,7 @@ def edit_user(user_id):
         form.name.data = user.name
         form.phone.data = user.phone
         form.address.data = user.address
+        form.has_access.data = user.has_access
         
         if group:
             form.group.data = group.name
@@ -533,7 +538,7 @@ def edit_user(user_id):
     )
 
 @app.route('/users/<int:user_id>/delete')
-@login_required
+@has_access()
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
@@ -561,7 +566,7 @@ def delete_user(user_id):
 
 # User checks and replies pages
 @app.route('/users/<int:user_id>')
-@login_required
+@has_access()
 def user_details(user_id):
     user = User.query.get_or_404(user_id)
 
@@ -591,7 +596,7 @@ def user_details(user_id):
     )
 
 @app.route('/users/<int:user_id>/checks/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_user_check(user_id):
     user = User.query.get_or_404(user_id)
     form = AttributeForm()
@@ -639,7 +644,7 @@ def new_user_check(user_id):
     )
 
 @app.route('/users/<int:user_id>/replies/new', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def new_user_reply(user_id):
     user = User.query.get_or_404(user_id)
     form = AttributeForm()
@@ -687,7 +692,7 @@ def new_user_reply(user_id):
     )
 
 @app.route('/user/<int:user_id>/checks/<int:user_check_id>/delete', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def delete_user_check(user_id, user_check_id):
     user_check = db.session.query(RadCheck).get_or_404(user_check_id)
     if not user_check.attribute in ['Cleartext-Password', 'Profile-Name']:
@@ -696,7 +701,7 @@ def delete_user_check(user_id, user_check_id):
     return redirect(url_for('user_details', user_id=user_id))
 
 @app.route('/users/<int:user_id>/replies/<int:user_reply_id>/delete', methods=['GET', 'POST'])
-@login_required
+@has_access()
 def delete_user_reply(user_id, user_reply_id):
     user_reply = db.session.query(RadReply).get_or_404(user_reply_id)
     if not user_reply.attribute in ['Cleartext-Password', 'Profile-Name']:

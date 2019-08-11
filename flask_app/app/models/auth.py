@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(255))
     phone = db.Column(db.String(50))
     address = db.Column(db.Text)
+    has_access = db.Column(db.Boolean, default=False)
 
     def hash_password(self):
         self.password = generate_password_hash(self.password)
@@ -26,4 +27,3 @@ class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True, index=True)
     description = db.Column(db.Text)
-

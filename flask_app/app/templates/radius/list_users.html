@@ -100,6 +100,16 @@
                 <i class="fa fa-ban" style="margin-right: 5px;"></i>
                 DISABLED
               </td>
+              {% endif %} {% if record.has_access %}
+              <td class="table-success">
+                <i class="fa fa-check-circle" style="margin-right: 5px;"></i>
+                <span>ALLOWED</span>
+              </td>
+              {% else %}
+              <td class="table-danger">
+                <i class="fa fa-ban" style="margin-right: 5px;"></i>
+                DISABLED
+              </td>
               {% endif %}
               <td class="table-actions">
                 <a href="{{ url_for('user_details', user_id=record.id) }}">
