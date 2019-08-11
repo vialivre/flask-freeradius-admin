@@ -390,7 +390,10 @@ def list_users():
 @app.route('/users/new', methods=['GET', 'POST'])
 @login_required
 def new_user():
+    groups = Group.query.all()
+    
     form = UserForm()
+    form.group.choices = [(group.name, group.name) for group in groups]
 
     if form.validate_on_submit():
         db.session.add(User(
@@ -433,8 +436,11 @@ def edit_user(user_id):
         group = Group.query.filter_by(name=user_group.groupname).first()
     else:
         group = None
+    
+    groups = Group.query.all()
 
     form = UserForm()
+    form.group.choices = [(group.name, group.name) for group in groups]
     form.username.render_kw = {'readonly': True}
 
     if form.validate_on_submit():

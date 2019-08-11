@@ -12,8 +12,6 @@ from wtforms import (
 )
 from wtforms.validators import DataRequired
 
-from app.models.auth import Group
-
 from app.utils import OPERATORS, read_vendors
 
 DICTIONARIES_PATH = app.config.get('DICTIONARIES_PATH')
@@ -46,15 +44,11 @@ class GroupForm(FlaskForm):
 
 
 class UserForm(FlaskForm):
-    groups = Group.query.all()
-
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email')
     password = PasswordField('Password')
     active = BooleanField('Active', default=True)
-    group = SelectField('Group', choices=[
-        (group.name, group.name) for group in groups
-    ])
+    group = SelectField('Group', choices=[])
     name = StringField('Name')
     phone = StringField('Phone')
     address = TextAreaField('Address')
