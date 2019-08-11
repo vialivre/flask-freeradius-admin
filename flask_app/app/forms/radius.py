@@ -37,14 +37,18 @@ class GroupForm(FlaskForm):
 class AttributeForm(FlaskForm):
     VENDORS = read_vendors(DICTIONARIES_PATH)
 
-    vendor = SelectField(
-        'Vendor', choices=VENDORS or [], 
-        validators=[DataRequired()], id='vendor_field'
-    )
+    vendor = SelectField('Vendor', choices=VENDORS or [], id='vendor_field')
+    
     attribute = SelectField(
         'Attribute', choices=[],
         validators=[DataRequired()], id='attribute_field'
     )
-    custom_attribute = StringField('Attribute')
-    operation = SelectField('Operation', choices=OPERATORS, validators=[DataRequired()])
-    value = StringField('Value', validators=[DataRequired()])
+    custom_attribute = StringField('Attribute', id='custom_attribute_field')
+    
+    operation = SelectField(
+        'Operation', choices=OPERATORS,
+        validators=[DataRequired()]
+    )
+    
+    value = SelectField('Value', choices=[], id='value_field')
+    custom_value = StringField('Value', id='custom_value_field')

@@ -223,8 +223,8 @@ def new_group_check(group_id):
 def _filter_attributes():
     dict_path = app.config.get('DICTIONARIES_PATH')
     vendor = request.args.get('vendor')
-    if not vendor:
-        return jsonify([])
+    if not vendor or vendor == 'others':
+        return jsonify([('Custom', 'Custom')])
 
     dict_data = read_dictionary(
         os.path.join(dict_path, 'dictionary.' + vendor)
