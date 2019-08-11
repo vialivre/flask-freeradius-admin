@@ -112,10 +112,18 @@
         <nav aria-label="Checks table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
             <li class="page-item">
-              <a class="page-link" href="#">Previous</a>
+              <a
+                class="page-link"
+                href="{{ url_for('group_details', group_id=group.id, checks_page=checks_pagination.prev_num if checks_pagination.has_prev else 1) }}"
+                >Previous</a
+              >
             </li>
             <li class="page-item">
-              <a class="page-link" href="#">Next</a>
+              <a
+                class="page-link"
+                href="{{ url_for('group_details', group_id=group.id, checks_page=checks_pagination.next_num if checks_pagination.has_next else 1) }}"
+                >Next</a
+              >
             </li>
           </ul>
         </nav>
@@ -177,10 +185,18 @@
         <nav aria-label="Replies table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
             <li class="page-item">
-              <a class="page-link" href="#">Previous</a>
+              <a
+                class="page-link"
+                href="{{ url_for('group_details', group_id=group.id, replies_page=replies_pagination.prev_num if replies_pagination.has_prev else 1) }}"
+                >Previous</a
+              >
             </li>
             <li class="page-item">
-              <a class="page-link" href="#">Next</a>
+              <a
+                class="page-link"
+                href="{{ url_for('group_details', group_id=group.id, replies_page=replies_pagination.next_num if replies_pagination.has_next else 1) }}"
+                >Next</a
+              >
             </li>
           </ul>
         </nav>

@@ -195,13 +195,30 @@ def delete_group(group_id):
 @login_required
 def group_details(group_id):
     group = Group.query.get_or_404(group_id)
-    checks = db.session.query(RadGroupCheck).all()
-    replies = db.session.query(RadGroupReply).all()
+
+    checks_page = int(request.args.get('checks_page', 1))
+    check_records = db.session.query(RadGroupCheck).filter_by(
+        groupname=group.name
+    ).paginate(
+        page=checks_page,
+        per_page=10
+    )
+
+    replies_page = int(request.args.get('replies_page', 1))
+    reply_records = db.session.query(RadGroupReply).filter_by(
+        groupname=group.name
+    ).paginate(
+        page=replies_page,
+        per_page=10
+    )
+
     return render_template(
         'radius/group_details.html',
         group=group,
-        checks=checks,
-        replies=replies
+        checks=check_records.items,
+        replies=reply_records.items,
+        checks_pagination=check_records,
+        replies_pagination=reply_records
     )
 
 @app.route('/groups/<int:group_id>/checks/new', methods=['GET', 'POST'])
