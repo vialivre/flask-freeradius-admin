@@ -1,8 +1,7 @@
-import os
 from app import app, db
 from flask import (
     render_template, flash, redirect,
-    url_for, request, jsonify
+    url_for, request
 )
 from flask_login import login_required
 
@@ -15,8 +14,6 @@ from app.models.radius import (
     RadCheck, RadReply
 )
 from app.models.auth import Group, User
-
-from app.utils import read_dictionary
 
 # NAS pages
 @app.route('/nas')
@@ -339,41 +336,6 @@ def new_group_reply(group_id):
         form_errors=form.errors,
         type='reply'
     )
-
-@app.route('/_filter_attributes')
-@login_required
-def _filter_attributes():
-    dict_path = app.config.get('DICTIONARIES_PATH')
-    vendor = request.args.get('vendor')
-    if not vendor or vendor == 'others':
-        return jsonify([('Custom', 'Custom')])
-
-    dict_data = read_dictionary(
-        os.path.join(dict_path, 'dictionary.' + vendor)
-    )
-    attributes = [(d['name'], d['name']) for d in dict_data['attributes']]
-    attributes = sorted(attributes, key=lambda a: a[1])
-    attributes.append(('Custom', 'Custom'))
-
-    return jsonify(attributes) if dict_data else jsonify([])
-
-@app.route('/_filter_values')
-@login_required
-def _filter_values():
-    dict_path = app.config.get('DICTIONARIES_PATH')
-    vendor = request.args.get('vendor')
-    attribute = request.args.get('attribute')
-    
-    dict_data = read_dictionary(
-        os.path.join(dict_path, 'dictionary.' + vendor)
-    )
-    if dict_data:
-        values = [(d['name'], d['name']) for d in dict_data['values'] 
-                                        if d['attribute'] == attribute]
-    else:
-        values = []
-
-    return jsonify(sorted(values, key=lambda v: v[1]))
 
 @app.route('/groups/<int:group_id>/checks/<int:group_check_id>/delete', methods=['GET', 'POST'])
 @login_required
