@@ -434,7 +434,6 @@ def new_user():
 
         return redirect(url_for('list_users'))
     elif form.errors:
-        print(form.errors)
         flash('Form has errors')
 
     return render_template(
@@ -442,4 +441,67 @@ def new_user():
         form=form,
         form_errors=form.errors,
         action='add'
+    )
+
+@app.route('/users/<int:user_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    user_group = db.session.query(RadUserGroup).filter_by(
+        username=user.username
+    ).first()
+    if user_group:
+        group = Group.query.filter_by(name=user_group.groupname).first()
+    else:
+        group = None
+
+    form = UserForm()
+    form.username.render_kw = {'readonly': True}
+
+    if form.validate_on_submit():
+        user.email = form.email.data
+        user.active = form.active.data
+        user.name = form.name.data
+        user.phone = form.phone.data
+        user.address = form.address.data
+        
+        if len(form.password.data):
+            user.password = form.password.data
+            user.hash_password()
+
+        if not group and form.group.data:
+            db.session.add(RadUserGroup(
+                username=form.username.data,
+                groupname=form.group.data,
+                priority=0
+            ))
+        elif group and group.name != form.group.data:
+            db.session.delete(group)
+            db.session.add(RadUserGroup(
+                username=form.username.data,
+                groupname=form.group.data,
+                priority=0
+            ))
+
+        db.session.commit()
+
+        return redirect(url_for('list_users'))
+    elif form.errors:
+        flash('Form has errors')
+    else:
+        form.username.data = user.username
+        form.email.data = user.email
+        form.active.data = user.active
+        form.name.data = user.name
+        form.phone.data = user.phone
+        form.address.data = user.address
+        
+        if group:
+            form.group.data = group.name
+
+    return render_template(
+        'radius/user_form.html',
+        form=form,
+        form_errors=form.errors,
+        action='edit'
     )

@@ -108,7 +108,7 @@
                     <span>Details</span>
                   </button>
                 </a>
-                <a href="#">
+                <a href="{{ url_for('edit_user', user_id=record.id) }}">
                   <button class="btn btn-sm btn-warning">
                     <i class="fa fa-edit"></i>
                     <span>Edit</span>
