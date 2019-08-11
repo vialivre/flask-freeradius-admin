@@ -35,13 +35,6 @@ def setup():
         )
         db.session.commit()
 
-@app.route('/')
-@login_required
-def index():
-    return render_template(
-        'base.html'
-    )
-
 @app.route('/_filter_attributes')
 @login_required
 def _filter_attributes():

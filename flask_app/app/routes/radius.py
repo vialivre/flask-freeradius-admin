@@ -11,9 +11,20 @@ from app.forms.radius import (
 )
 from app.models.radius import (
     Nas, RadUserGroup, RadGroupCheck, RadGroupReply,
-    RadCheck, RadReply
+    RadCheck, RadReply, RadPostAuth
 )
 from app.models.auth import Group, User
+
+# Dashboard
+@app.route('/')
+@login_required
+def index():
+    auth_info = db.session.query(RadPostAuth).limit(10).all()
+
+    return render_template(
+        'radius/dashboard.html',
+        auth_info=auth_info
+    )
 
 # NAS pages
 @app.route('/nas')
