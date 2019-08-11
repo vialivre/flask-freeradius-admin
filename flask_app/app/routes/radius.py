@@ -353,3 +353,19 @@ def _filter_values():
         values = []
 
     return jsonify(sorted(values, key=lambda v: v[1]))
+
+@app.route('/groups/<int:group_id>/checks/<int:group_check_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_group_check(group_id, group_check_id):
+    group_check = db.session.query(RadGroupCheck).get_or_404(group_check_id)
+    db.session.delete(group_check)
+    db.session.commit()
+    return redirect(url_for('group_details', group_id=group_id))
+
+@app.route('/groups/<int:group_id>/replies/<int:group_reply_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_group_reply(group_id, group_reply_id):
+    group_reply = db.session.query(RadGroupReply).get_or_404(group_reply_id)
+    db.session.delete(group_reply)
+    db.session.commit()
+    return redirect(url_for('group_details', group_id=group_id))
