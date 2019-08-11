@@ -15,7 +15,10 @@ from app.utils import read_dictionary
 def setup():
     # create admin user
     if not User.query.count():
-        admin = User(username='admin', password='admin')
+        admin = User(
+            username='admin', password='admin',
+            name='Administrative User'
+        )
         admin.hash_password()
         db.session.add(admin)
         db.session.commit()

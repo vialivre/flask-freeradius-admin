@@ -1,0 +1,188 @@
+{% extends 'base.html' %} {% block header %}
+<div class="app-page-title">
+  <div class="page-title-wrapper">
+    <div class="page-title-heading">
+      <div class="page-title-icon">
+        <i class="fa fa-users icon-gradient bg-happy-itmeo"></i>
+      </div>
+      <div>
+        <strong>User:</strong> {{ user.username }}
+        <div class="page-title-subheading">
+          {{ user.name }}
+        </div>
+      </div>
+    </div>
+    <div class="page-title-actions">
+      <button onclick="submitform()" class="btn-shadow btn btn-success">
+        <span class="btn-icon-wrapper pr-2 opacity-7">
+          <i class="fa fa-plus fa-w-20"></i>
+        </span>
+        <span>Add</span>
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block container %}
+<form id="attribute-form" method="POST">
+  {{ form.csrf_token }}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="main-card mb-3 card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              {% if type == 'check' %}
+              <h5 class="card-title">Check Attribute Details</h5>
+              {% elif type == 'reply' %}
+              <h5 class="card-title">Reply Attribute Details</h5>
+              {% endif %}
+              <div class="form-group">
+                <label for="vendor_field">Vendor</label>
+                {{ form.vendor(class='form-control') }}
+              </div>
+              <div class="form-group">
+                <label for="attribute_field">Attribute</label>
+                {% if 'attribute' in form_errors %}
+                {{ form.attribute(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                  {{ form_errors["attribute"][0] }}
+                </div>
+                {% else %}
+                {{ form.attribute(class='form-control') }}
+                {% endif %}
+              </div>
+              <div class="form-group" id="custom_attribute_block">
+                <label for="custom_attribute_field">Attribute</label>
+                {{ form.custom_attribute(class='form-control') }}
+              </div>
+              <div class="form-group">
+                <label for="operation">Operation</label>
+                {% if 'operation' in form_errors %}
+                {{ form.operation(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                  {{ form_errors["operation"][0] }}
+                </div>
+                {% else %}
+                {{ form.operation(class='form-control') }}
+                {% endif %}
+              </div>
+              <div class="form-group" id="value_block">
+                <label for="value_field">Value</label>
+                {{ form.value(class='form-control') }}
+              </div>
+              <div class="form-group" id="custom_value_block">
+                <label for="custom_value_field">Value</label>
+                {{ form.custom_value(class='form-control') }}
+              </div>
+              {{ form.processed_fields() }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %} {% block scripts %}
+<script type="text/javascript">
+  function submitform() {
+    $("#attribute-form").submit();
+  }
+
+  var dropdown = {
+    vendor: $("#vendor_field"),
+    attribute: $("#attribute_field")
+  };
+
+  var proc_fields_field = $("#proc_fields");
+
+  updateAttributes();
+  updateValues();
+
+  function updateAttributes() {
+    var send = {
+      vendor: dropdown.vendor.val()
+    };
+
+    dropdown.attribute.empty();
+
+    $.getJSON("{{ url_for('_filter_attributes') }}", send, function(data) {
+      dropdown.attribute.append(
+        $("<option>", {
+          text: "Select an option",
+          disabled: true,
+          selected: true
+        })
+      );
+      data.forEach(function(item) {
+        dropdown.attribute.append(
+          $("<option>", {
+            value: item[0],
+            text: item[1]
+          })
+        );
+      });
+    });
+  }
+
+  function updateValues() {
+    var customAttribute = $("#custom_attribute_field");
+    var customAttributeBlock = $("#custom_attribute_block");
+    var valueBlock = $("#value_block");
+    var customValueBlock = $("#custom_value_block");
+    var value = $("#value_field");
+
+    if (dropdown.attribute.val() === "Custom") {
+      customAttributeBlock.show();
+      valueBlock.hide();
+      customValueBlock.show();
+      proc_fields_field.val("ca-cv");
+    } else {
+      customAttributeBlock.hide();
+      valueBlock.hide();
+      customValueBlock.show();
+
+      var send = {
+        vendor: dropdown.vendor.val(),
+        attribute: dropdown.attribute.val()
+      };
+
+      $.getJSON("{{ url_for('_filter_values') }}", send, function(data) {
+        if (!data.length) {
+          valueBlock.hide();
+          customValueBlock.show();
+          proc_fields_field.val("sa-cv");
+        } else {
+          value.empty();
+          valueBlock.show();
+          customValueBlock.hide();
+          proc_fields_field.val("sa-sv");
+
+          value.append(
+            $("<option>", {
+              text: "Select an option",
+              disabled: true,
+              selected: true
+            })
+          );
+          data.forEach(function(item) {
+            value.append(
+              $("<option>", {
+                value: item[0],
+                text: item[1]
+              })
+            );
+          });
+        }
+      });
+    }
+  }
+
+  dropdown.vendor.change(function() {
+    updateAttributes();
+  });
+
+  dropdown.attribute.change(function() {
+    updateValues();
+  });
+</script>
+{% endblock %}

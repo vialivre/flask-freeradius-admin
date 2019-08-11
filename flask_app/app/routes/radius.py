@@ -277,7 +277,6 @@ def new_group_check(group_id):
             return redirect(url_for('new_group_check', group_id=group_id))
         return redirect(url_for('group_details', group_id=group_id))
     elif form.errors:
-        print(form.errors)
         flash('Form has errors')
 
     return render_template(
@@ -326,7 +325,6 @@ def new_group_reply(group_id):
             return redirect(url_for('new_group_reply', group_id=group_id))
         return redirect(url_for('group_details', group_id=group_id))
     elif form.errors:
-        print(form.errors)
         flash('Form has errors')
 
     return render_template(
@@ -533,3 +531,114 @@ def user_details(user_id):
         replies_pagination=reply_records
     )
 
+@app.route('/users/<int:user_id>/checks/new', methods=['GET', 'POST'])
+@login_required
+def new_user_check(user_id):
+    user = User.query.get_or_404(user_id)
+    form = AttributeForm()
+
+    if form.validate_on_submit():
+        data_type = form.processed_fields.data
+
+        if data_type == 'ca-cv':
+            db.session.add(RadCheck(
+                username=user.username,
+                attribute=form.custom_attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-cv':
+            db.session.add(RadCheck(
+                username=user.username,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-sv':
+            db.session.add(RadCheck(
+                username=user.username,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.value.data
+            ))
+            db.session.commit()
+        else:
+            flash('Unable to process attribute')
+            return redirect(url_for('new_user_check', user_id=user_id))
+        return redirect(url_for('user_details', user_id=user_id))
+    elif form.errors:
+        flash('Form has errors')
+
+    return render_template(
+        'radius/user_attribute_form.html',
+        user=user,
+        form=form,
+        form_errors=form.errors,
+        type='check'
+    )
+
+@app.route('/users/<int:user_id>/replies/new', methods=['GET', 'POST'])
+@login_required
+def new_user_reply(user_id):
+    user = User.query.get_or_404(user_id)
+    form = AttributeForm()
+
+    if form.validate_on_submit():
+        data_type = form.processed_fields.data
+
+        if data_type == 'ca-cv':
+            db.session.add(RadReply(
+                username=user.username,
+                attribute=form.custom_attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-cv':
+            db.session.add(RadReply(
+                username=user.username,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.custom_value.data
+            ))
+            db.session.commit()
+        elif data_type == 'sa-sv':
+            db.session.add(RadReply(
+                username=user.username,
+                attribute=form.attribute.data,
+                op=form.operation.data,
+                value=form.value.data
+            ))
+            db.session.commit()
+        else:
+            flash('Unable to process attribute')
+            return redirect(url_for('new_user_reply', user_id=user_id))
+        return redirect(url_for('user_details', user_id=user_id))
+    elif form.errors:
+        flash('Form has errors')
+
+    return render_template(
+        'radius/user_attribute_form.html',
+        user=user,
+        form=form,
+        form_errors=form.errors,
+        type='reply'
+    )
+
+# @app.route('/groups/<int:group_id>/checks/<int:group_check_id>/delete', methods=['GET', 'POST'])
+# @login_required
+# def delete_group_check(group_id, group_check_id):
+#     group_check = db.session.query(RadGroupCheck).get_or_404(group_check_id)
+#     db.session.delete(group_check)
+#     db.session.commit()
+#     return redirect(url_for('group_details', group_id=group_id))
+
+# @app.route('/groups/<int:group_id>/replies/<int:group_reply_id>/delete', methods=['GET', 'POST'])
+# @login_required
+# def delete_group_reply(group_id, group_reply_id):
+#     group_reply = db.session.query(RadGroupReply).get_or_404(group_reply_id)
+#     db.session.delete(group_reply)
+#     db.session.commit()
+#     return redirect(url_for('group_details', group_id=group_id))
