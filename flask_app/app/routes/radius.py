@@ -189,6 +189,25 @@ def edit_group(group_id):
 def delete_group(group_id):
     group = Group.query.get_or_404(group_id)
     db.session.delete(group)
+
+    users_group = db.session.query(RadUserGroup).filter_by(
+        groupname=group.name
+    ).all()
+    for user_group in users_group:
+        db.session.delete(user_group)
+
+    group_checks = db.session.query(RadGroupCheck).filter_by(
+        groupname=group.name
+    ).all()
+    for check in group_checks:
+        db.session.delete(check)
+
+    group_replies = db.session.query(RadGroupReply).filter_by(
+        groupname=group.name
+    ).all()
+    for reply in group_replies:
+        db.session.delete(reply)
+
     db.session.commit()
     return redirect(url_for('list_groups'))
 
@@ -505,3 +524,18 @@ def edit_user(user_id):
         form_errors=form.errors,
         action='edit'
     )
+
+@app.route('/users/<int:user_id>/delete')
+@login_required
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+
+    user_group = db.session.query(RadUserGroup).filter_by(
+        username=user.name
+    ).first()
+    if user_group:
+        db.session.delete(user_group)
+
+    db.session.commit()
+    return redirect(url_for('list_users'))

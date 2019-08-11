@@ -114,7 +114,7 @@
                     <span>Edit</span>
                   </button>
                 </a>
-                <a href="#">
+                <a href="{{ url_for('delete_user', user_id=record.id) }}">
                   <button class="btn btn-sm btn-danger">
                     <i class="fa fa-trash-alt"></i>
                     <span>Delete</span>
