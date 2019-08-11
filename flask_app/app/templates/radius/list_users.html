@@ -102,7 +102,7 @@
               </td>
               {% endif %}
               <td class="table-actions">
-                <a href="#">
+                <a href="{{ url_for('user_details', user_id=record.id) }}">
                   <button class="btn btn-sm btn-info">
                     <i class="fa fa-info-circle"></i>
                     <span>Details</span>

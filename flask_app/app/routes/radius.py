@@ -501,3 +501,35 @@ def delete_user(user_id):
 
     db.session.commit()
     return redirect(url_for('list_users'))
+
+# User checks and replies pages
+@app.route('/users/<int:user_id>')
+@login_required
+def user_details(user_id):
+    user = User.query.get_or_404(user_id)
+
+    checks_page = int(request.args.get('checks_page', 1))
+    check_records = db.session.query(RadCheck).filter_by(
+        username=user.username
+    ).paginate(
+        page=checks_page,
+        per_page=10
+    )
+
+    replies_page = int(request.args.get('replies_page', 1))
+    reply_records = db.session.query(RadReply).filter_by(
+        username=user.username
+    ).paginate(
+        page=replies_page,
+        per_page=10
+    )
+
+    return render_template(
+        'radius/user_details.html',
+        user=user,
+        checks=check_records.items,
+        replies=reply_records.items,
+        checks_pagination=check_records,
+        replies_pagination=reply_records
+    )
+
