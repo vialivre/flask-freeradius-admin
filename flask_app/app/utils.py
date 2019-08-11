@@ -58,6 +58,16 @@ def read_dictionary(dict_path):
                     }
                     attributes.append(attribute)
                 elif line_list[0] == 'VALUE':
+                    attribute_exists = [a for a in attributes if a['name'] == line_list[1]]
+                    if not len(attribute_exists):
+                        attribute = {
+                            'name': line_list[1],
+                            'number': None,
+                            'type': None,
+                            'options': None
+                        }
+                        attributes.append(attribute)
+                    
                     value = {
                         'attribute': line_list[1],
                         'name': line_list[2],

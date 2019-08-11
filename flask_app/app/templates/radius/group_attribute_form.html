@@ -103,14 +103,14 @@
     dropdown.attribute.empty();
 
     $.getJSON("{{ url_for('_filter_attributes') }}", send, function(data) {
+      dropdown.attribute.append(
+        $("<option>", {
+          text: "Select an option",
+          disabled: true,
+          selected: true
+        })
+      );
       data.forEach(function(item) {
-        dropdown.attribute.append(
-          $("<option>", {
-            text: "Select an option",
-            disabled: true,
-            selected: true
-          })
-        );
         dropdown.attribute.append(
           $("<option>", {
             value: item[0],
@@ -126,6 +126,7 @@
     var customAttributeBlock = $("#custom_attribute_block");
     var valueBlock = $("#value_block");
     var customValueBlock = $("#custom_value_block");
+    var value = $("#value_field");
 
     if (dropdown.attribute.val() === "Custom") {
       customAttributeBlock.show();
@@ -133,8 +134,40 @@
       customValueBlock.show();
     } else {
       customAttributeBlock.hide();
-      valueBlock.show();
-      customValueBlock.hide();
+      valueBlock.hide();
+      customValueBlock.show();
+
+      var send = {
+        vendor: dropdown.vendor.val(),
+        attribute: dropdown.attribute.val()
+      };
+
+      $.getJSON("{{ url_for('_filter_values') }}", send, function(data) {
+        if (!data.length) {
+          valueBlock.hide();
+          customValueBlock.show();
+        } else {
+          value.empty();
+          valueBlock.show();
+          customValueBlock.hide();
+
+          value.append(
+            $("<option>", {
+              text: "Select an option",
+              disabled: true,
+              selected: true
+            })
+          );
+          data.forEach(function(item) {
+            value.append(
+              $("<option>", {
+                value: item[0],
+                text: item[1]
+              })
+            );
+          });
+        }
+      });
     }
   }
 

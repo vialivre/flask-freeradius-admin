@@ -230,6 +230,23 @@ def _filter_attributes():
         os.path.join(dict_path, 'dictionary.' + vendor)
     )
     attributes = [(d['name'], d['name']) for d in dict_data['attributes']]
+    attributes = sorted(attributes, key=lambda a: a[1])
     attributes.append(('Custom', 'Custom'))
 
     return jsonify(attributes) if dict_data else jsonify([])
+
+@app.route('/_filter_values')
+@login_required
+def _filter_values():
+    dict_path = app.config.get('DICTIONARIES_PATH')
+    vendor = request.args.get('vendor')
+    attribute = request.args.get('attribute')
+    
+    dict_data = read_dictionary(
+        os.path.join(dict_path, 'dictionary.' + vendor)
+    )
+    values = [(d['name'], d['name']) for d in dict_data['values']
+                                     if d['attribute'] == attribute]
+
+    return jsonify(sorted(values, key=lambda v: v[1])) \
+                    if dict_data else jsonify([])
