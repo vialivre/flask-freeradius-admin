@@ -96,7 +96,9 @@
               <td>{{ check.op }}</td>
               <td>{{ check.value }}</td>
               <td class="table-actions">
-                <a href="#">
+                <a
+                  href="{{ url_for('delete_user_check', user_id=user.id, user_check_id=check.id) }}"
+                >
                   <button class="btn btn-sm btn-danger">
                     <i class="fa fa-trash-alt"></i>
                   </button>
@@ -169,7 +171,9 @@
               <td>{{ reply.op }}</td>
               <td>{{ reply.value }}</td>
               <td class="table-actions">
-                <a href="#">
+                <a
+                  href="{{ url_for('delete_user_reply', user_id=user.id, user_reply_id=reply.id) }}"
+                >
                   <button class="btn btn-sm btn-danger">
                     <i class="fa fa-trash-alt"></i>
                   </button>
