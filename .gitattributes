@@ -1,0 +1,2 @@
+flask_app/app/static/* linguist-vendored
+flask_app/app/templates/* linguist-vendored
