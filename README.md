@@ -29,3 +29,15 @@ If you want to check the container logs, get the container ID using `ps`:
 docker ps
 docker logs {container_id}
 ```
+
+If you want to access either the database or the freeradius shell:
+```
+docker ps
+docker exec -it {container_id} /bin/bash
+```
+
+If you want to access the application shell:
+```
+docker ps
+docker exec -it {container_id} /bin/sh
+```
