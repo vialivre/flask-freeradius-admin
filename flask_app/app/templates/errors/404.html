@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>404</title>
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link
+      href="{{ url_for('static', filename='styles/main.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='styles/custom.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="app-container app-theme-white body-tabs-shadow">
+      <div class="app-container">
+        <div class="h-100 bg-plum-plate bg-animation">
+          <div class="d-flex h-100 justify-content-center align-items-center">
+            <div class="mx-auto app-login-box col-md-8">
+              <div class="modal-dialog w-100 mx-auto">
+                <div class="modal-content">
+                    <div class="modal-body">
+                      <div class="h5 modal-title text-center">
+                        <h4
+                          class="themeoptions-heading"
+                          style="margin-bottom: 15px;"
+                        >
+                          <span>Error 404</span>
+                        </h4>
+                      </div>
+                      <img class='error-image' src="{{ url_for('static', filename='images/404.gif') }}" />
+                      <p class='error-msg'>We could not find what you were looking for :(</p>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='scripts/main.js') }}"
+    ></script>
+  </body>
+</html>
