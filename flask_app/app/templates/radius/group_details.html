@@ -6,7 +6,7 @@
         <i class="fa fa-user-tag icon-gradient bg-happy-itmeo"></i>
       </div>
       <div>
-        <strong>Group:</strong> {{ group.name }}
+        <strong>{{ _('Group') }}:</strong> {{ group.name }}
         <div class="page-title-subheading">
           {{ group.description }}
         </div>
@@ -25,7 +25,7 @@
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-file-export fa-w-20"></i>
           </span>
-          Export
+          {{ _('Export') }}
         </button>
         <div
           tabindex="-1"
@@ -63,7 +63,7 @@
       <div class="card-header-tab card-header">
         <div class="card-header-title">
           <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
-          <span>Check Attributes</span>
+          <span>{{ _('Check Attributes') }}</span>
         </div>
         <div class="btn-actions-pane-right">
           <a
@@ -73,7 +73,7 @@
             <span class="btn-icon-wrapper pr-2 opacity-7">
               <i class="fa fa-plus fa-w-20"></i>
             </span>
-            Add
+            {{ _('Add') }}
           </a>
         </div>
       </div>
@@ -82,9 +82,9 @@
           <thead>
             <tr>
               <th class="table-heading">#</th>
-              <th class="table-heading">Attribute</th>
-              <th class="table-heading">Operation</th>
-              <th class="table-heading">Value</th>
+              <th class="table-heading">{{ _('Attribute') }}</th>
+              <th class="table-heading">{{ _('Operation') }}</th>
+              <th class="table-heading">{{ _('Value') }}</th>
               <th class="table-heading"></th>
             </tr>
           </thead>
@@ -109,7 +109,7 @@
           </tbody>
         </table>
         {% if not checks %}
-        <div class="no-record-message">No record found</div>
+        <div class="no-record-message">{{ _('No record found') }}</div>
         {% else %}
         <nav aria-label="Checks table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
@@ -117,14 +117,14 @@
               <a
                 class="page-link"
                 href="{{ url_for('group_details', group_id=group.id, checks_page=checks_pagination.prev_num if checks_pagination.has_prev else 1) }}"
-                >Previous</a
+                >{{ _('Previous') }}</a
               >
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 href="{{ url_for('group_details', group_id=group.id, checks_page=checks_pagination.next_num if checks_pagination.has_next else 1) }}"
-                >Next</a
+                >{{ _('Next') }}</a
               >
             </li>
           </ul>
@@ -138,7 +138,7 @@
       <div class="card-header-tab card-header">
         <div class="card-header-title">
           <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
-          <span>Reply Attributes</span>
+          <span>{{ _('Reply Attributes') }}</span>
         </div>
         <div class="btn-actions-pane-right">
           <a
@@ -148,7 +148,7 @@
             <span class="btn-icon-wrapper pr-2 opacity-7">
               <i class="fa fa-plus fa-w-20"></i>
             </span>
-            Add
+            {{ _('Add') }}
           </a>
         </div>
       </div>
@@ -157,9 +157,9 @@
           <thead>
             <tr>
               <th class="table-heading">#</th>
-              <th class="table-heading">Attribute</th>
-              <th class="table-heading">Operation</th>
-              <th class="table-heading">Value</th>
+              <th class="table-heading">{{ _('Attribute') }}</th>
+              <th class="table-heading">{{ _('Operation') }}</th>
+              <th class="table-heading">{{ _('Value') }}</th>
               <th class="table-heading"></th>
             </tr>
           </thead>
@@ -184,7 +184,7 @@
           </tbody>
         </table>
         {% if not replies %}
-        <div class="no-record-message">No record found</div>
+        <div class="no-record-message">{{ _('No record found') }}</div>
         {% else %}
         <nav aria-label="Replies table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
@@ -192,14 +192,14 @@
               <a
                 class="page-link"
                 href="{{ url_for('group_details', group_id=group.id, replies_page=replies_pagination.prev_num if replies_pagination.has_prev else 1) }}"
-                >Previous</a
+                >{{ _('Previous') }}</a
               >
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 href="{{ url_for('group_details', group_id=group.id, replies_page=replies_pagination.next_num if replies_pagination.has_next else 1) }}"
-                >Next</a
+                >{{ _('Next') }}</a
               >
             </li>
           </ul>

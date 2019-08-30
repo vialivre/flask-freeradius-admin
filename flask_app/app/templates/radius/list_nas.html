@@ -6,9 +6,9 @@
         <i class="fa fa-network-wired icon-gradient bg-happy-itmeo"></i>
       </div>
       <div>
-        NAS
+        {{ _('NAS') }}
         <div class="page-title-subheading">
-          NAS details and management.
+          {{ _('NAS details and management.') }}
         </div>
       </div>
     </div>
@@ -18,7 +18,7 @@
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-plus fa-w-20"></i>
           </span>
-          Add
+          {{ _('Add') }}
         </button>
       </a>
       <div class="d-inline-block dropdown">
@@ -33,7 +33,7 @@
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-file-export fa-w-20"></i>
           </span>
-          Export
+          {{ _('Export') }}
         </button>
         <div
           tabindex="-1"
@@ -69,7 +69,7 @@
   <div class="col-lg-12">
     <div class="main-card mb-3 card">
       <div class="card-body">
-        <h5 class="card-title">NAS Details</h5>
+        <h5 class="card-title">{{ _('NAS Details') }}</h5>
         <table class="mb-0 table table-bordered table-hover table-striped">
           <thead>
             <tr>
@@ -94,13 +94,13 @@
                 <a href="{{ url_for('edit_nas', nas_id=record.id) }}">
                   <button class="btn btn-sm btn-warning">
                     <i class="fa fa-edit"></i>
-                    <span>Edit</span>
+                    <span>{{ _('Edit') }}</span>
                   </button>
                 </a>
                 <a href="{{ url_for('delete_nas', nas_id=record.id) }}">
                   <button class="btn btn-sm btn-danger">
                     <i class="fa fa-trash-alt"></i>
-                    <span>Delete</span>
+                    <span>{{ _('Delete') }}</span>
                   </button>
                 </a>
               </td>
@@ -109,7 +109,7 @@
           </tbody>
         </table>
         {% if not table_records %}
-        <div class="no-record-message">No record found</div>
+        <div class="no-record-message">{{ _('No record found') }}</div>
         {% else %}
         <nav aria-label="Table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
@@ -117,14 +117,14 @@
               <a
                 class="page-link"
                 href="{{ url_for('list_nas', page=pagination.prev_num if pagination.has_prev else 1) }}"
-                >Previous</a
+                >{{ _('Previous') }}</a
               >
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 href="{{ url_for('list_nas', page=pagination.next_num if pagination.has_next else pagination.page) }}"
-                >Next</a
+                >{{ _('Next') }}</a
               >
             </li>
           </ul>

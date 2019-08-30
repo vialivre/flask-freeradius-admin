@@ -6,7 +6,7 @@
         <i class="fa fa-users icon-gradient bg-happy-itmeo"></i>
       </div>
       <div>
-        <strong>User:</strong> {{ user.username }}
+        <strong>{{ _('User') }}:</strong> {{ user.username }}
         <div class="page-title-subheading">
           {{ user.name }}
         </div>
@@ -17,7 +17,7 @@
         <span class="btn-icon-wrapper pr-2 opacity-7">
           <i class="fa fa-plus fa-w-20"></i>
         </span>
-        <span>Add</span>
+        <span>{{ _('Add') }}</span>
       </button>
     </div>
   </div>
@@ -32,16 +32,16 @@
           <div class="row">
             <div class="col-md-4">
               {% if type == 'check' %}
-              <h5 class="card-title">Check Attribute Details</h5>
+              <h5 class="card-title">{{ _('Check Attribute Details') }}</h5>
               {% elif type == 'reply' %}
-              <h5 class="card-title">Reply Attribute Details</h5>
+              <h5 class="card-title">{{ _('Reply Attribute Details') }}</h5>
               {% endif %}
               <div class="form-group">
-                <label for="vendor_field">Vendor</label>
+                <label for="vendor_field">{{ form.vendor.label }}</label>
                 {{ form.vendor(class='form-control') }}
               </div>
               <div class="form-group">
-                <label for="attribute_field">Attribute</label>
+                <label for="attribute_field">{{ form.attribute.label }}</label>
                 {% if 'attribute' in form_errors %}
                 {{ form.attribute(class='form-control is-invalid') }}
                 <div class="invalid-feedback">
@@ -52,11 +52,11 @@
                 {% endif %}
               </div>
               <div class="form-group" id="custom_attribute_block">
-                <label for="custom_attribute_field">Attribute</label>
+                <label for="custom_attribute_field">{{ form.custom_attribute.label }}</label>
                 {{ form.custom_attribute(class='form-control') }}
               </div>
               <div class="form-group">
-                <label for="operation">Operation</label>
+                <label for="operation">{{ form.operation.label }}</label>
                 {% if 'operation' in form_errors %}
                 {{ form.operation(class='form-control is-invalid') }}
                 <div class="invalid-feedback">
@@ -67,11 +67,11 @@
                 {% endif %}
               </div>
               <div class="form-group" id="value_block">
-                <label for="value_field">Value</label>
+                <label for="value_field">{{ form.value.label }}</label>
                 {{ form.value(class='form-control') }}
               </div>
               <div class="form-group" id="custom_value_block">
-                <label for="custom_value_field">Value</label>
+                <label for="custom_value_field">{{ form.custom_value.label }}</label>
                 {{ form.custom_value(class='form-control') }}
               </div>
               {{ form.processed_fields() }}
@@ -108,7 +108,7 @@
     $.getJSON("{{ url_for('_filter_attributes') }}", send, function(data) {
       dropdown.attribute.append(
         $("<option>", {
-          text: "Select an option",
+          text: "{{ _('Select an option') }}",
           disabled: true,
           selected: true
         })
@@ -159,7 +159,7 @@
 
           value.append(
             $("<option>", {
-              text: "Select an option",
+              text: "{{ _('Select an option') }}",
               disabled: true,
               selected: true
             })

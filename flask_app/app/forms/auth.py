@@ -4,10 +4,17 @@ from wtforms import (
     SubmitField
 )
 from wtforms.validators import DataRequired
+from flask_babel import lazy_gettext as _l
 
 
 class LoginForm(FlaskForm):
-    user = StringField('Username or Email', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember me')
-    submit = SubmitField('Login to Dashboard')
+    user = StringField(
+        _l('Username or Email'), 
+        validators=[DataRequired(_l('This field is required.'))]
+    )
+    password = PasswordField(
+        _l('Password'),
+        validators=[DataRequired(_l('This field is required.'))]
+    )
+    remember = BooleanField(_l('Remember me'))
+    submit = SubmitField(_l('Login to Dashboard'))

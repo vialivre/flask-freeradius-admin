@@ -6,9 +6,9 @@
         <i class="fa fa-network-wired icon-gradient bg-happy-itmeo"></i>
       </div>
       <div>
-        NAS
+        {{ _('NAS') }}
         <div class="page-title-subheading">
-          NAS details and management.
+          {{ _('NAS details and management.') }}
         </div>
       </div>
     </div>
@@ -18,12 +18,12 @@
         <span class="btn-icon-wrapper pr-2 opacity-7">
           <i class="fa fa-plus fa-w-20"></i>
         </span>
-        <span>Add</span>
+        <span>{{ _('Add') }}</span>
         {% elif action == 'edit' %}
         <span class="btn-icon-wrapper pr-2 opacity-7">
           <i class="fa fa-edit fa-w-20"></i>
         </span>
-        <span>Edit</span>
+        <span>{{ _('Edit') }}</span>
         {% endif %}
       </button>
     </div>
@@ -36,9 +36,9 @@
     <div class="col-md-6">
       <div class="main-card mb-3 card">
         <div class="card-body">
-          <h5 class="card-title">Main info</h5>
+          <h5 class="card-title">{{ _('Main info') }}</h5>
           <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">{{ form.name.label }}</label>
             {% if form.errors.get('name') %}
             {{ form.name(class='form-control is-invalid') }}
             <div class="invalid-feedback">{{ form_errors.get("name")[0] }}</div>
@@ -47,7 +47,7 @@
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="server">Server</label>
+            <label for="server">{{ form.server.label }}</label>
             {% if form.errors.get('server') %}
             {{ form.server(class='form-control is-invalid') }}
             <div class="invalid-feedback">
@@ -58,7 +58,7 @@
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="ports">Ports</label>
+            <label for="ports">{{ form.ports.label }}</label>
             {% if form.errors.get('ports') %}
             {{ form.ports(class='form-control is-invalid') }}
             <div class="invalid-feedback">
@@ -69,7 +69,7 @@
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="secret">Secret</label>
+            <label for="secret">{{ form.secret.label }}</label>
             {% if form.errors.get('secret') %}
             {{ form.secret(class='form-control is-invalid') }}
             <div class="invalid-feedback">
@@ -86,13 +86,13 @@
     <div class="col-md-6">
       <div class="main-card mb-3 card">
         <div class="card-body">
-          <h5 class="card-title">More details</h5>
+          <h5 class="card-title">{{ _('More details') }}</h5>
           <div class="form-group">
-            <label for="short_name">Short Name</label>
+            <label for="short_name">{{ form.short_name.label }}</label>
             {{ form.short_name(class='form-control') }}
           </div>
           <div class="form-group">
-            <label for="type">Type</label>
+            <label for="type">{{ form.type.label }}</label>
             {% if form.VENDORS %}
               {% if form.errors.get('type') %}
               {{ form.type(class='form-control is-invalid') }}
@@ -107,11 +107,11 @@
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="community">Community</label>
+            <label for="community">{{ form.community.label }}</label>
             {{ form.community(class='form-control') }}
           </div>
           <div class="form-group">
-            <label for="description">Description</label>
+            <label for="description">{{ form.description.label }}</label>
             {{ form.description(class='form-control', style="min-height: 120px;") }}
           </div>
         </div>

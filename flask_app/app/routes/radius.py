@@ -3,6 +3,7 @@ from flask import (
     render_template, flash, redirect,
     url_for, request
 )
+from flask_babel import _
 
 from app.forms.radius import (
     NasForm, GroupForm, AttributeForm,
@@ -30,9 +31,9 @@ def index():
 @app.route('/nas')
 @has_access()
 def list_nas():
-    table_headers = ("#", "Name", "Short name", "Server", "Ports",
-                     "Secret", "Type", "Community", "Description",
-                     "Actions")
+    table_headers = ("#", _("Name"), _("Short name"), _("Server"), _("Ports"),
+                     _("Secret"), _("Type"), _("Community"), _("Description"),
+                     _("Actions"))
 
     page = int(request.args.get('page', 1))
     records = db.session.query(Nas).paginate(page=page)
@@ -61,11 +62,11 @@ def new_nas():
             description=form.description.data
         ))
         db.session.commit()
-        flash('New NAS added', 'success')
+        flash(_('New NAS added'), 'success')
         return redirect(url_for('list_nas'))
     elif form.errors:
         print(form.errors)
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
     
     return render_template(
         'radius/nas_form.html',
@@ -90,10 +91,10 @@ def edit_nas(nas_id):
         nas.community = form.community.data
         nas.description = form.description.data
         db.session.commit()
-        flash('NAS data updated', 'success')
+        flash(_('NAS data updated'), 'success')
         return redirect(url_for('list_nas'))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
     elif request.method == 'GET':
         form.name.data = nas.nasname
         form.short_name.data = nas.shortname
@@ -123,9 +124,9 @@ def delete_nas(nas_id):
 @app.route('/groups')
 @has_access()
 def list_groups():
-    table_headers = ("#", "Group Name", "Description",
-                     "Checks Count", "Replies Count",
-                     "Actions")
+    table_headers = ("#", _("Group Name"), _("Description"),
+                     _("Checks Count"), _("Replies Count"),
+                     _("Actions"))
 
     page = int(request.args.get('page', 1))
     records = Group.query.paginate(page=page)
@@ -156,10 +157,10 @@ def new_group():
             description=form.description.data
         ))
         db.session.commit()
-        flash('New group added', 'success')
+        flash(_('New group added'), 'success')
         return redirect(url_for('list_groups'))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
 
     return render_template(
         'radius/group_form.html',
@@ -178,10 +179,10 @@ def edit_group(group_id):
         group.name = form.name.data
         group.description = form.description.data
         db.session.commit()
-        flash('Group data updated', 'success')
+        flash(_('Group data updated'), 'success')
         return redirect(url_for('list_groups'))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
     elif request.method == 'GET':
         form.name.data = group.name
         form.description.data = group.description
@@ -285,11 +286,11 @@ def new_group_check(group_id):
             ))
             db.session.commit()
         else:
-            flash('Unable to process attribute', 'error')
+            flash(_('Unable to process attribute'), 'error')
             return redirect(url_for('new_group_check', group_id=group_id))
         return redirect(url_for('group_details', group_id=group_id))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
 
     return render_template(
         'radius/group_attribute_form.html',
@@ -333,11 +334,11 @@ def new_group_reply(group_id):
             ))
             db.session.commit()
         else:
-            flash('Unable to process attribute', 'error')
+            flash(_('Unable to process attribute'), 'error')
             return redirect(url_for('new_group_reply', group_id=group_id))
         return redirect(url_for('group_details', group_id=group_id))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
 
     return render_template(
         'radius/group_attribute_form.html',
@@ -367,9 +368,9 @@ def delete_group_reply(group_id, group_reply_id):
 @app.route('/users')
 @has_access()
 def list_users():
-    table_headers = ("#", "Username", "Group",
-                     "Checks Count", "Replies Count",
-                     "Status", "Access", "Actions")
+    table_headers = ("#", _("Username"), _("Group"),
+                     _("Checks Count"), _("Replies Count"),
+                     _("Status"), _("Access"), _("Actions"))
 
     page = int(request.args.get('page', 1))
     records = User.query.paginate(page=page)
@@ -451,10 +452,10 @@ def new_user():
 
         db.session.commit()
 
-        flash('New user added', 'success')
+        flash(_('New user added'), 'success')
         return redirect(url_for('list_users'))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
 
     return render_template(
         'radius/user_form.html',
@@ -549,18 +550,16 @@ def edit_user(user_id):
                     value='Reject'
                 ))
             elif form.active.data and is_disabled:
-                print('tem acesso po')
                 for access in user_access_list:
                     if access.value == 'Reject':
-                        print('deleta isso ae')
                         db.session.delete(access)
 
         db.session.commit()
 
-        flash('User data updated', 'success')
+        flash(_('User data updated'), 'success')
         return redirect(url_for('list_users'))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
     else:
         form.username.data = user.username
         form.email.data = user.email
@@ -672,11 +671,11 @@ def new_user_check(user_id):
             ))
             db.session.commit()
         else:
-            flash('Unable to process attribute', 'error')
+            flash(_('Unable to process attribute'), 'error')
             return redirect(url_for('new_user_check', user_id=user_id))
         return redirect(url_for('user_details', user_id=user_id))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
 
     return render_template(
         'radius/user_attribute_form.html',
@@ -720,11 +719,11 @@ def new_user_reply(user_id):
             ))
             db.session.commit()
         else:
-            flash('Unable to process attribute', 'error')
+            flash(_('Unable to process attribute'), 'error')
             return redirect(url_for('new_user_reply', user_id=user_id))
         return redirect(url_for('user_details', user_id=user_id))
     elif form.errors:
-        flash('Form has errors', 'error')
+        flash(_('Form has errors'), 'error')
 
     return render_template(
         'radius/user_attribute_form.html',

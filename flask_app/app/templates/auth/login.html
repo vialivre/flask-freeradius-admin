@@ -30,33 +30,33 @@
                           class="themeoptions-heading"
                           style="margin-bottom: 15px;"
                         >
-                          <span>Please sign in to your account below.</span>
+                          <span>{{ _('Please sign in to your account below.') }}</span>
                         </h4>
                       </div>
                       {{ form.csrf_token }}
                       <div class="form-row">
                         <div class="col-md-12">
                           <div class="position-relative form-group">
-                            {{ form.user(placeholder='Username or email', class='form-control') }}
+                            {{ form.user(placeholder=_('Username or email'), class='form-control') }}
                           </div>
                         </div>
                         <div class="col-md-12">
                           <div class="position-relative form-group">
-                            {{ form.password(placeholder='Password', class='form-control') }}
+                            {{ form.password(placeholder=_('Password'), class='form-control') }}
                           </div>
                         </div>
                       </div>
                       <div class="position-relative form-check">
                         {{ form.remember(class='form-check-input') }}
                         <label for="remember" class="form-check-label"
-                          >Keep me logged in</label
+                          >{{ _('Keep me logged in') }}</label
                         >
                       </div>
                     </div>
                     <div class="modal-footer clearfix">
                       <div class="float-left">
                         <a href="#" class="btn-lg btn btn-link"
-                          >Recover Password</a
+                          >{{ _('Recover Password') }}</a
                         >
                       </div>
                       <div class="float-right">
