@@ -94,7 +94,14 @@
           <div class="form-group">
             <label for="type">Type</label>
             {% if form.VENDORS %}
-            {{ form.type(class='form-control') }}
+              {% if form.errors.get('type') %}
+              {{ form.type(class='form-control is-invalid') }}
+              <div class="invalid-feedback">
+                {{ form_errors.get("type")[0] }}
+              </div>
+              {% else %}
+              {{ form.type(class='form-control') }}
+              {% endif %}
             {% else %}
             {{ form.custom_type(class='form-control')}}
             {% endif %}

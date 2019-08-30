@@ -71,6 +71,18 @@
         </div>
       </div>
     </div>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    <div id="toast-container" class="toast-bottom-center">
+      {% for category, message in messages %}
+      <div class="toast toast-{{category}}">
+        <div class="toast-title">{{ category.capitalize() }}</div>
+        <div class="toast-message">{{ message }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
     <script
       type="text/javascript"
       src="{{ url_for('static', filename='scripts/main.js') }}"
