@@ -439,6 +439,15 @@ def new_user():
             op=':=',
             value=form.password.data
         ))
+
+        if not form.active.data:
+            db.session.add(RadCheck(
+                username=form.username.data,
+                attribute='Auth-Type',
+                op=':=',
+                value='Reject'
+            ))
+
         db.session.commit()
 
         return redirect(url_for('list_users'))
@@ -478,6 +487,7 @@ def edit_user(user_id):
         user.address = form.address.data
         user.has_access = form.has_access.data
         
+        # update password
         if len(form.password.data):
             user.password = form.password.data
             user.hash_password()
@@ -488,6 +498,7 @@ def edit_user(user_id):
             ).first()
             pass_att.value = form.password.data
 
+        # insert or update group
         if not group and form.group.data:
             db.session.add(RadUserGroup(
                 username=form.username.data,
@@ -512,6 +523,35 @@ def edit_user(user_id):
                 RadCheck.attribute == 'Profile-Name'
             ).first()
             group_attr.value = form.group.data
+
+        # update access
+        user_access_list = db.session.query(RadCheck).filter(
+            RadCheck.username == user.username,
+            RadCheck.attribute == 'Auth-Type'
+        ).all()
+        if not len(user_access_list) and not form.active.data:
+            db.session.add(RadCheck(
+                username=user.username,
+                attribute='Auth-Type',
+                op=':=',
+                value='Reject'
+            ))
+        elif len(user_access_list):
+            is_disabled = 'Reject' in [a.value for a in user_access_list]
+            print(form.active.data)
+            if not form.active.data and not is_disabled:
+                db.session.add(RadCheck(
+                    username=user.username,
+                    attribute='Auth-Type',
+                    op=':=',
+                    value='Reject'
+                ))
+            elif form.active.data and is_disabled:
+                print('tem acesso po')
+                for access in user_access_list:
+                    if access.value == 'Reject':
+                        print('deleta isso ae')
+                        db.session.delete(access)
 
         db.session.commit()
 
@@ -695,7 +735,12 @@ def new_user_reply(user_id):
 @has_access()
 def delete_user_check(user_id, user_check_id):
     user_check = db.session.query(RadCheck).get_or_404(user_check_id)
-    if not user_check.attribute in ['Cleartext-Password', 'Profile-Name']:
+    if user_check.attribute == 'Auth-Type' and user_check.value == 'Reject':
+        user = User.query.get(user_id)
+        user.active = True
+        db.session.delete(user_check)
+        db.session.commit()
+    elif not user_check.attribute in ['Cleartext-Password', 'Profile-Name']:
         db.session.delete(user_check)
         db.session.commit()
     return redirect(url_for('user_details', user_id=user_id))
