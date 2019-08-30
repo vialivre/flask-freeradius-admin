@@ -1,0 +1,458 @@
+# Portuguese (Brazil) translations for PROJECT.
+# Copyright (C) 2019 ORGANIZATION
+# This file is distributed under the same license as the Flask FreeRadius Admin project.
+# JÚLIA RIZZA <CONTATO@JULIARIZZA.COM>, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: CONTATO@JULIARIZZA.COM\n"
+"POT-Creation-Date: 2019-08-30 18:26-0300\n"
+"PO-Revision-Date: 2019-08-30 18:28-0300\n"
+"Last-Translator: SÉRGIO SOUZA <SERGIO@VIALIVRE.NET>\n"
+"Language: pt_BR\n"
+"Language-Team: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.7.0\n"
+
+#: app/__init__.py:20
+msgid "Please login to access this page."
+msgstr "Por favor, faça login para acessar essa página."
+
+#: app/forms/auth.py:12
+msgid "Username or Email"
+msgstr "Nome de Usuário ou Email"
+
+#: app/forms/auth.py:13 app/forms/auth.py:17 app/forms/radius.py:31
+#: app/forms/radius.py:35 app/forms/radius.py:39 app/forms/radius.py:43
+#: app/forms/radius.py:56 app/forms/radius.py:65 app/forms/radius.py:87
+#: app/forms/radius.py:94
+msgid "This field is required."
+msgstr ""
+
+#: app/forms/auth.py:16 app/forms/radius.py:68 app/templates/auth/login.html:45
+#: app/templates/radius/dashboard.html:11
+msgid "Password"
+msgstr ""
+
+#: app/forms/auth.py:19
+msgid "Remember me"
+msgstr ""
+
+#: app/forms/auth.py:20
+msgid "Login to Dashboard"
+msgstr ""
+
+#: app/forms/radius.py:30 app/forms/radius.py:71 app/routes/radius.py:34
+msgid "Name"
+msgstr ""
+
+#: app/forms/radius.py:34 app/routes/radius.py:34
+msgid "Server"
+msgstr ""
+
+#: app/forms/radius.py:38 app/routes/radius.py:34
+msgid "Ports"
+msgstr ""
+
+#: app/forms/radius.py:42 app/routes/radius.py:35
+msgid "Secret"
+msgstr ""
+
+#: app/forms/radius.py:45
+msgid "Short Name"
+msgstr ""
+
+#: app/forms/radius.py:46 app/forms/radius.py:47 app/routes/radius.py:35
+msgid "Type"
+msgstr ""
+
+#: app/forms/radius.py:48 app/routes/radius.py:35
+msgid "Community"
+msgstr ""
+
+#: app/forms/radius.py:49 app/forms/radius.py:58 app/routes/radius.py:35
+#: app/routes/radius.py:127
+msgid "Description"
+msgstr ""
+
+#: app/forms/radius.py:50 app/forms/radius.py:59
+msgid "Submit"
+msgstr ""
+
+#: app/forms/radius.py:55 app/routes/radius.py:127
+msgid "Group Name"
+msgstr ""
+
+#: app/forms/radius.py:64 app/routes/radius.py:371
+#: app/templates/radius/dashboard.html:10
+msgid "Username"
+msgstr ""
+
+#: app/forms/radius.py:67
+msgid "Email"
+msgstr ""
+
+#: app/forms/radius.py:69 app/templates/radius/user_form.html:77
+msgid "Active"
+msgstr ""
+
+#: app/forms/radius.py:70 app/routes/radius.py:371
+#: app/templates/radius/group_attribute_form.html:9
+#: app/templates/radius/group_details.html:9
+msgid "Group"
+msgstr ""
+
+#: app/forms/radius.py:72
+msgid "Phone"
+msgstr ""
+
+#: app/forms/radius.py:73
+msgid "Address"
+msgstr ""
+
+#: app/forms/radius.py:74 app/templates/radius/user_form.html:82
+msgid "Can login into this system?"
+msgstr ""
+
+#: app/forms/radius.py:81
+msgid "Vendor"
+msgstr ""
+
+#: app/forms/radius.py:86 app/forms/radius.py:90
+#: app/templates/radius/group_details.html:85
+#: app/templates/radius/group_details.html:160
+#: app/templates/radius/user_details.html:85
+#: app/templates/radius/user_details.html:163
+msgid "Attribute"
+msgstr ""
+
+#: app/forms/radius.py:93 app/templates/radius/group_details.html:86
+#: app/templates/radius/group_details.html:161
+#: app/templates/radius/user_details.html:86
+#: app/templates/radius/user_details.html:164
+msgid "Operation"
+msgstr ""
+
+#: app/forms/radius.py:97 app/forms/radius.py:98
+#: app/templates/radius/group_details.html:87
+#: app/templates/radius/group_details.html:162
+#: app/templates/radius/user_details.html:87
+#: app/templates/radius/user_details.html:165
+msgid "Value"
+msgstr ""
+
+#: app/forms/radius.py:101
+msgid "Processed Fields"
+msgstr ""
+
+#: app/routes/auth.py:29
+msgid "Invalid username/email or password"
+msgstr ""
+
+#: app/routes/radius.py:34
+msgid "Short name"
+msgstr ""
+
+#: app/routes/radius.py:36 app/routes/radius.py:129 app/routes/radius.py:373
+msgid "Actions"
+msgstr ""
+
+#: app/routes/radius.py:65
+msgid "New NAS added"
+msgstr ""
+
+#: app/routes/radius.py:69 app/routes/radius.py:97 app/routes/radius.py:163
+#: app/routes/radius.py:185 app/routes/radius.py:293 app/routes/radius.py:341
+#: app/routes/radius.py:458 app/routes/radius.py:562 app/routes/radius.py:678
+#: app/routes/radius.py:726
+msgid "Form has errors"
+msgstr ""
+
+#: app/routes/radius.py:94
+msgid "NAS data updated"
+msgstr ""
+
+#: app/routes/radius.py:128 app/routes/radius.py:372
+msgid "Checks Count"
+msgstr ""
+
+#: app/routes/radius.py:128 app/routes/radius.py:372
+msgid "Replies Count"
+msgstr ""
+
+#: app/routes/radius.py:160
+msgid "New group added"
+msgstr ""
+
+#: app/routes/radius.py:182
+msgid "Group data updated"
+msgstr ""
+
+#: app/routes/radius.py:289 app/routes/radius.py:337 app/routes/radius.py:674
+#: app/routes/radius.py:722
+msgid "Unable to process attribute"
+msgstr ""
+
+#: app/routes/radius.py:373
+msgid "Status"
+msgstr ""
+
+#: app/routes/radius.py:373
+msgid "Access"
+msgstr ""
+
+#: app/routes/radius.py:455
+msgid "New user added"
+msgstr ""
+
+#: app/routes/radius.py:559
+msgid "User data updated"
+msgstr ""
+
+#: app/templates/base.html:122
+msgid "General"
+msgstr ""
+
+#: app/templates/base.html:126
+msgid "Dashboard"
+msgstr ""
+
+#: app/templates/base.html:133 app/templates/radius/group_form.html:9
+#: app/templates/radius/list_groups.html:9
+msgid "Groups"
+msgstr ""
+
+#: app/templates/base.html:139 app/templates/radius/list_users.html:9
+#: app/templates/radius/user_form.html:9
+msgid "Users"
+msgstr ""
+
+#: app/templates/base.html:145 app/templates/radius/list_nas.html:9
+#: app/templates/radius/nas_form.html:9
+msgid "NAS"
+msgstr ""
+
+#: app/templates/auth/login.html:33
+msgid "Please sign in to your account below."
+msgstr ""
+
+#: app/templates/auth/login.html:40
+msgid "Username or email"
+msgstr "Nome de usuário ou email"
+
+#: app/templates/auth/login.html:52
+msgid "Keep me logged in"
+msgstr ""
+
+#: app/templates/auth/login.html:59
+msgid "Recover Password"
+msgstr ""
+
+#: app/templates/errors/404.html:36
+msgid "Error 404"
+msgstr ""
+
+#: app/templates/errors/404.html:40
+msgid "We could not find what you were looking for"
+msgstr ""
+
+#: app/templates/errors/500.html:36
+msgid "Error 500"
+msgstr ""
+
+#: app/templates/errors/500.html:39
+msgid "We did something wrong, sorry!"
+msgstr ""
+
+#: app/templates/errors/500.html:40
+msgid "We'll try to fix it as soon as possible."
+msgstr ""
+
+#: app/templates/radius/dashboard.html:6
+msgid "Authentication Latest Data"
+msgstr ""
+
+#: app/templates/radius/dashboard.html:12
+msgid "Reply"
+msgstr ""
+
+#: app/templates/radius/dashboard.html:13
+msgid "Called Station Id"
+msgstr ""
+
+#: app/templates/radius/dashboard.html:14
+msgid "Calling Station Id"
+msgstr ""
+
+#: app/templates/radius/dashboard.html:15
+msgid "Date and Time"
+msgstr ""
+
+#: app/templates/radius/dashboard.html:32
+#: app/templates/radius/group_details.html:112
+#: app/templates/radius/group_details.html:187
+#: app/templates/radius/list_groups.html:114
+#: app/templates/radius/list_nas.html:112
+#: app/templates/radius/list_users.html:139
+#: app/templates/radius/user_details.html:115
+#: app/templates/radius/user_details.html:193
+msgid "No record found"
+msgstr ""
+
+#: app/templates/radius/group_attribute_form.html:20
+#: app/templates/radius/group_details.html:76
+#: app/templates/radius/group_details.html:151
+#: app/templates/radius/group_form.html:21
+#: app/templates/radius/list_groups.html:21
+#: app/templates/radius/list_nas.html:21
+#: app/templates/radius/list_users.html:21
+#: app/templates/radius/nas_form.html:21
+#: app/templates/radius/user_attribute_form.html:20
+#: app/templates/radius/user_details.html:76
+#: app/templates/radius/user_details.html:154
+#: app/templates/radius/user_form.html:21
+msgid "Add"
+msgstr ""
+
+#: app/templates/radius/group_attribute_form.html:35
+#: app/templates/radius/user_attribute_form.html:35
+msgid "Check Attribute Details"
+msgstr ""
+
+#: app/templates/radius/group_attribute_form.html:37
+#: app/templates/radius/user_attribute_form.html:37
+msgid "Reply Attribute Details"
+msgstr ""
+
+#: app/templates/radius/group_attribute_form.html:111
+#: app/templates/radius/group_attribute_form.html:162
+#: app/templates/radius/user_attribute_form.html:111
+#: app/templates/radius/user_attribute_form.html:162
+msgid "Select an option"
+msgstr ""
+
+#: app/templates/radius/group_details.html:28
+#: app/templates/radius/list_groups.html:36
+#: app/templates/radius/list_nas.html:36
+#: app/templates/radius/list_users.html:36
+#: app/templates/radius/user_details.html:28
+msgid "Export"
+msgstr ""
+
+#: app/templates/radius/group_details.html:66
+#: app/templates/radius/user_details.html:66
+msgid "Check Attributes"
+msgstr ""
+
+#: app/templates/radius/group_details.html:120
+#: app/templates/radius/group_details.html:195
+#: app/templates/radius/list_groups.html:122
+#: app/templates/radius/list_nas.html:120
+#: app/templates/radius/list_users.html:147
+#: app/templates/radius/user_details.html:123
+#: app/templates/radius/user_details.html:201
+msgid "Previous"
+msgstr ""
+
+#: app/templates/radius/group_details.html:127
+#: app/templates/radius/group_details.html:202
+#: app/templates/radius/list_groups.html:129
+#: app/templates/radius/list_nas.html:127
+#: app/templates/radius/list_users.html:154
+#: app/templates/radius/user_details.html:130
+#: app/templates/radius/user_details.html:208
+msgid "Next"
+msgstr ""
+
+#: app/templates/radius/group_details.html:141
+#: app/templates/radius/user_details.html:144
+msgid "Reply Attributes"
+msgstr ""
+
+#: app/templates/radius/group_form.html:11
+#: app/templates/radius/list_groups.html:11
+msgid "Groups details and management."
+msgstr ""
+
+#: app/templates/radius/group_form.html:26
+#: app/templates/radius/list_groups.html:99
+#: app/templates/radius/list_nas.html:97
+#: app/templates/radius/list_users.html:124
+#: app/templates/radius/nas_form.html:26 app/templates/radius/user_form.html:26
+msgid "Edit"
+msgstr ""
+
+#: app/templates/radius/group_form.html:41
+msgid "Group details"
+msgstr ""
+
+#: app/templates/radius/list_groups.html:72
+msgid "Groups Details"
+msgstr ""
+
+#: app/templates/radius/list_groups.html:93
+#: app/templates/radius/list_users.html:118
+msgid "Details"
+msgstr ""
+
+#: app/templates/radius/list_groups.html:105
+#: app/templates/radius/list_nas.html:103
+#: app/templates/radius/list_users.html:130
+msgid "Delete"
+msgstr ""
+
+#: app/templates/radius/list_nas.html:11 app/templates/radius/nas_form.html:11
+msgid "NAS details and management."
+msgstr ""
+
+#: app/templates/radius/list_nas.html:72
+msgid "NAS Details"
+msgstr ""
+
+#: app/templates/radius/list_users.html:11
+#: app/templates/radius/user_form.html:11
+msgid "Users details and management."
+msgstr ""
+
+#: app/templates/radius/list_users.html:72
+msgid "Users Details"
+msgstr ""
+
+#: app/templates/radius/list_users.html:96
+msgid "ACTIVE"
+msgstr ""
+
+#: app/templates/radius/list_users.html:101
+#: app/templates/radius/list_users.html:111
+msgid "DISABLED"
+msgstr ""
+
+#: app/templates/radius/list_users.html:106
+msgid "ALLOWED"
+msgstr ""
+
+#: app/templates/radius/nas_form.html:39
+msgid "Main info"
+msgstr ""
+
+#: app/templates/radius/nas_form.html:89
+msgid "More details"
+msgstr ""
+
+#: app/templates/radius/user_attribute_form.html:9
+#: app/templates/radius/user_details.html:9
+msgid "User"
+msgstr ""
+
+#: app/templates/radius/user_form.html:39
+msgid "User account info"
+msgstr ""
+
+#: app/templates/radius/user_form.html:92
+msgid "User details"
+msgstr ""
+
