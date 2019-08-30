@@ -28,7 +28,11 @@ def read_vendors(dict_folder_path):
     for file in os.listdir(dict_folder_path):
         if file.startswith('dictionary'):
             filename_parts = file.split('.')[1:]
+            
             vendor = '-'.join([fp.capitalize() for fp in filename_parts])
+            if vendor == 'Freeradius':
+                continue
+
             vendors.append(('.'.join(filename_parts), vendor))
     vendors = sorted(vendors, key=lambda v: v[1])
     vendors.append(('others', 'Others'))
