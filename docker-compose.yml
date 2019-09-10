@@ -2,9 +2,7 @@ version: "3.2"
 
 services:
   db:
-    build:
-      context: ./database
-      dockerfile: Dockerfile
+    image: postgres:9.6
     restart: always
     ports:
       - "5432:5432"
@@ -12,6 +10,8 @@ services:
       POSTGRES_DB: radius
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
+    volumes:
+      - ./database/scripts:/docker-entrypoint-initdb.d
     networks:
       - freeradius-admin-network
   freeradius:
