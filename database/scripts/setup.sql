@@ -14,7 +14,7 @@
 /*
  *  Create default administrator for RADIUS
  */
-CREATE USER radius WITH PASSWORD 'radpass';
+CREATE USER radius WITH PASSWORD 'R6L~t48}2GRdtD=f';
 
 /*
  * The server can read any table in SQL
