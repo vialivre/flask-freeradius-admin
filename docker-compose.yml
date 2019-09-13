@@ -5,13 +5,14 @@ services:
     image: postgres:9.6
     restart: always
     ports:
-      - "5432:5432"
+      - 5432:5432
     environment:
       POSTGRES_DB: radius
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     volumes:
       - ./database/scripts:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/postgresql/data
     networks:
       - freeradius-admin-network
   freeradius:
@@ -34,7 +35,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
     ports:
-      - "8000:5000"
+      - 8000:5000
     depends_on:
       - db
       - freeradius
@@ -56,3 +57,4 @@ networks:
 
 volumes:
   dictionaries:
+  db_data:
