@@ -1,4 +1,4 @@
-FROM freeradius/freeradius-server:latest
+FROM freeradius/freeradius-server:3.0.19
 
 COPY ./raddb/ /etc/raddb/
 COPY ./configs/sql /etc/freeradius/mods-available/sql

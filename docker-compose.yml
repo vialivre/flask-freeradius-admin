@@ -8,8 +8,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_DB: radius
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: flask_fr_admin_user
+      POSTGRES_PASSWORD: 7zJ7Bek3V7?=9#r9
     volumes:
       - ./database/scripts:/docker-entrypoint-initdb.d
       - db_data:/var/lib/postgresql/data
@@ -41,8 +41,8 @@ services:
       - freeradius
     environment:
       DATABASE_SERVER: db
-      DATABASE_USER: admin
-      DATABASE_PASSWORD: admin
+      DATABASE_USER: flask_fr_admin_user
+      DATABASE_PASSWORD: 7zJ7Bek3V7?=9#r9
       DATABASE_NAME: radius
     networks:
       - freeradius-admin-network

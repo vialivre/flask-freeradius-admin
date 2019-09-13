@@ -109,7 +109,7 @@ sql {
 	server = "db"
 	port = 5432
 	login = "radius"
-	password = "radpass"
+	password = "R6L~t48}2GRdtD=f"
 
 	# Database table configuration for everything except Oracle
 	radius_db = "radius"

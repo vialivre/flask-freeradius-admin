@@ -17,7 +17,7 @@ def setup():
     # create admin user
     if not User.query.count():
         admin = User(
-            username='admin', password='admin',
+            username='admin', password='freeradius@admin',
             name='Administrative User', has_access=True
         )
         admin.hash_password()
@@ -27,7 +27,7 @@ def setup():
             username='admin',
             attribute='Cleartext-Password',
             op=':=',
-            value='admin'
+            value='freeradius@admin'
         ))
         db.session.commit()
 
