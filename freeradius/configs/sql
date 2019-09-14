@@ -147,11 +147,11 @@ sql {
 
 	# If set to 'yes' (default) we read the group tables unless Fall-Through = no in the reply table.
 	# If set to 'no' we do not read the group tables unless Fall-Through = yes in the reply table.
-#	read_groups = yes
+	read_groups = yes
 
 	# If set to 'yes' (default) we read profiles unless Fall-Through = no in the groupreply table.
 	# If set to 'no' we do not read profiles unless Fall-Through = yes in the groupreply table.
-#	read_profiles = yes
+	read_profiles = yes
 
 	# Remove stale session if checkrad does not see a double login
 	delete_stale_sessions = yes
@@ -260,7 +260,7 @@ sql {
 
 	# Set to 'yes' to read radius clients from the database ('nas' table)
 	# Clients will ONLY be read on server startup.
-#	read_clients = yes
+	read_clients = yes
 
 	# Table to keep radius client info
 	client_table = "nas"
