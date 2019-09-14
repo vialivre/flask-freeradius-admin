@@ -16,16 +16,16 @@
             </tr>
           </thead>
           <tbody>
+            {% for info in auth_info %}
             <tr>
-              {% for info in auth_info %}
               <td>{{ info.username }}</td>
               <td>{{ info.pass }}</td>
               <td>{{ info.reply }}</td>
               <td>{{ info.callingstationid }}</td>
               <td>{{ info.calledstationid }}</td>
               <td>{{ info.authdate }}</td>
-              {% endfor %}
             </tr>
+            {% endfor %}
           </tbody>
         </table>
         {% if not auth_info %}
