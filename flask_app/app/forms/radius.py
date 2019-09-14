@@ -35,8 +35,7 @@ class NasForm(FlaskForm):
         validators=[DataRequired(_l('This field is required.'))]
     )
     ports = IntegerField(
-        _l('Ports'),
-        validators=[DataRequired(_l('This field is required.'))]
+        _l('Ports')
     )
     secret = StringField(
         _l('Secret'),
