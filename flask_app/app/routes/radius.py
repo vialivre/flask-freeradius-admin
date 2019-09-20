@@ -4,6 +4,7 @@ from flask import (
     url_for, request
 )
 from flask_babel import _
+from sqlalchemy.sql.expression import desc
 
 from app.forms.radius import (
     NasForm, GroupForm, AttributeForm,
@@ -20,7 +21,9 @@ from app.utils import has_access
 @app.route('/')
 @has_access()
 def index():
-    auth_info = db.session.query(RadPostAuth).limit(10).all()
+    auth_info = db.session.query(RadPostAuth)\
+        .order_by(desc('authdate'))\
+        .limit(20).all()
 
     return render_template(
         'radius/dashboard.html',
