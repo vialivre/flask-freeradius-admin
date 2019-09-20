@@ -6,7 +6,7 @@
         <i class="fa fa-users icon-gradient bg-happy-itmeo"></i>
       </div>
       <div>
-        <strong>{{ _('User') }}:</strong> {{ user.username }}
+        <strong>{{ _("User") }}:</strong> {{ user.username }}
         <div class="page-title-subheading">
           {{ user.name }}
         </div>
@@ -25,7 +25,7 @@
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-file-export fa-w-20"></i>
           </span>
-          {{ _('Export') }}
+          {{ _("Export") }}
         </button>
         <div
           tabindex="-1"
@@ -63,7 +63,7 @@
       <div class="card-header-tab card-header">
         <div class="card-header-title">
           <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
-          <span>{{ _('Check Attributes') }}</span>
+          <span>{{ _("Check Attributes") }}</span>
         </div>
         <div class="btn-actions-pane-right">
           <a
@@ -73,7 +73,7 @@
             <span class="btn-icon-wrapper pr-2 opacity-7">
               <i class="fa fa-plus fa-w-20"></i>
             </span>
-            {{ _('Add') }}
+            {{ _("Add") }}
           </a>
         </div>
       </div>
@@ -82,9 +82,9 @@
           <thead>
             <tr>
               <th class="table-heading">#</th>
-              <th class="table-heading">{{ _('Attribute') }}</th>
-              <th class="table-heading">{{ _('Operation') }}</th>
-              <th class="table-heading">{{ _('Value') }}</th>
+              <th class="table-heading">{{ _("Attribute") }}</th>
+              <th class="table-heading">{{ _("Operation") }}</th>
+              <th class="table-heading">{{ _("Value") }}</th>
               <th class="table-heading"></th>
             </tr>
           </thead>
@@ -96,8 +96,7 @@
               <td>{{ check.op }}</td>
               <td>{{ check.value }}</td>
               <td class="table-actions">
-                {% if not check.attribute in ['Cleartext-Password',
-                'Profile-Name'] %}
+                {% if not check.attribute in ['Cleartext-Password'] %}
                 <a
                   href="{{ url_for('delete_user_check', user_id=user.id, user_check_id=check.id) }}"
                 >
@@ -112,7 +111,7 @@
           </tbody>
         </table>
         {% if not checks %}
-        <div class="no-record-message">{{ _('No record found') }}</div>
+        <div class="no-record-message">{{ _("No record found") }}</div>
         {% else %}
         <nav aria-label="Checks table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
@@ -120,14 +119,14 @@
               <a
                 class="page-link"
                 href="{{ url_for('user_details', user_id=user.id, checks_page=checks_pagination.prev_num if checks_pagination.has_prev else 1) }}"
-                >{{ _('Previous') }}</a
+                >{{ _("Previous") }}</a
               >
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 href="{{ url_for('user_details', user_id=user.id, checks_page=checks_pagination.next_num if checks_pagination.has_next else 1) }}"
-                >{{ _('Next') }}</a
+                >{{ _("Next") }}</a
               >
             </li>
           </ul>
@@ -141,7 +140,7 @@
       <div class="card-header-tab card-header">
         <div class="card-header-title">
           <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
-          <span>{{ _('Reply Attributes') }}</span>
+          <span>{{ _("Reply Attributes") }}</span>
         </div>
         <div class="btn-actions-pane-right">
           <a
@@ -151,7 +150,7 @@
             <span class="btn-icon-wrapper pr-2 opacity-7">
               <i class="fa fa-plus fa-w-20"></i>
             </span>
-            {{ _('Add') }}
+            {{ _("Add") }}
           </a>
         </div>
       </div>
@@ -160,9 +159,9 @@
           <thead>
             <tr>
               <th class="table-heading">#</th>
-              <th class="table-heading">{{ _('Attribute') }}</th>
-              <th class="table-heading">{{ _('Operation') }}</th>
-              <th class="table-heading">{{ _('Value') }}</th>
+              <th class="table-heading">{{ _("Attribute") }}</th>
+              <th class="table-heading">{{ _("Operation") }}</th>
+              <th class="table-heading">{{ _("Value") }}</th>
               <th class="table-heading"></th>
             </tr>
           </thead>
@@ -174,8 +173,7 @@
               <td>{{ reply.op }}</td>
               <td>{{ reply.value }}</td>
               <td class="table-actions">
-                {% if not reply.attribute in ['Cleartext-Password',
-                'Profile-Name'] %}
+                {% if not reply.attribute in ['Cleartext-Password'] %}
                 <a
                   href="{{ url_for('delete_user_reply', user_id=user.id, user_reply_id=reply.id) }}"
                 >
@@ -190,7 +188,7 @@
           </tbody>
         </table>
         {% if not replies %}
-        <div class="no-record-message">{{ _('No record found') }}</div>
+        <div class="no-record-message">{{ _("No record found") }}</div>
         {% else %}
         <nav aria-label="Replies table navigation" style="margin: 10px 0;">
           <ul class="pagination justify-content-center">
@@ -198,14 +196,14 @@
               <a
                 class="page-link"
                 href="{{ url_for('user_details', user_id=user.id, replies_page=replies_pagination.prev_num if replies_pagination.has_prev else 1) }}"
-                >{{ _('Previous') }}</a
+                >{{ _("Previous") }}</a
               >
             </li>
             <li class="page-item">
               <a
                 class="page-link"
                 href="{{ url_for('user_details', user_id=user.id, replies_page=replies_pagination.next_num if replies_pagination.has_next else 1) }}"
-                >{{ _('Next') }}</a
+                >{{ _("Next") }}</a
               >
             </li>
           </ul>

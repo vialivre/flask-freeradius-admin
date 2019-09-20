@@ -430,13 +430,6 @@ def new_user():
         
         db.session.add(RadCheck(
             username=form.username.data,
-            attribute='Profile-Name',
-            op=':=',
-            value=form.group.data
-        ))
-
-        db.session.add(RadCheck(
-            username=form.username.data,
             attribute='Cleartext-Password',
             op=':=',
             value=form.password.data
@@ -508,12 +501,6 @@ def edit_user(user_id):
                 groupname=form.group.data,
                 priority=0
             ))
-            db.session.add(RadCheck(
-                username=form.username.data,
-                attribute='Profile-Name',
-                op=':=',
-                value=form.group.data
-            ))
         elif group and group.name != form.group.data:
             db.session.delete(group)
             db.session.add(RadUserGroup(
@@ -521,11 +508,6 @@ def edit_user(user_id):
                 groupname=form.group.data,
                 priority=0
             ))
-            group_attr = db.session.query(RadCheck).filter(
-                RadCheck.username == user.username,
-                RadCheck.attribute == 'Profile-Name'
-            ).first()
-            group_attr.value = form.group.data
 
         # update access
         user_access_list = db.session.query(RadCheck).filter(
@@ -742,7 +724,7 @@ def delete_user_check(user_id, user_check_id):
         user.active = True
         db.session.delete(user_check)
         db.session.commit()
-    elif not user_check.attribute in ['Cleartext-Password', 'Profile-Name']:
+    elif not user_check.attribute in ['Cleartext-Password']:
         db.session.delete(user_check)
         db.session.commit()
     return redirect(url_for('user_details', user_id=user_id))
@@ -751,7 +733,7 @@ def delete_user_check(user_id, user_check_id):
 @has_access()
 def delete_user_reply(user_id, user_reply_id):
     user_reply = db.session.query(RadReply).get_or_404(user_reply_id)
-    if not user_reply.attribute in ['Cleartext-Password', 'Profile-Name']:
+    if not user_reply.attribute in ['Cleartext-Password']:
         db.session.delete(user_reply)
         db.session.commit()
     return redirect(url_for('user_details', user_id=user_id))
