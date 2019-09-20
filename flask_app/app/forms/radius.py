@@ -27,12 +27,11 @@ class NasForm(FlaskForm):
     VENDORS = read_vendors(DICTIONARIES_PATH)
 
     name = StringField(
-        _l('Name'),
+        _l('NAS Name'),
         validators=[DataRequired(_l('This field is required.'))]
     )
     server = StringField(
-        _l('Server'),
-        validators=[DataRequired(_l('This field is required.'))]
+        _l('Server')
     )
     ports = IntegerField(
         _l('Ports')
@@ -41,7 +40,10 @@ class NasForm(FlaskForm):
         _l('Secret'),
         validators=[DataRequired(_l('This field is required.'))]
     )
-    short_name = StringField(_l('Short Name'))
+    short_name = StringField(
+        _l('Short Name'),
+        validators=[DataRequired(_l('This field is required.'))]
+    )
     type = SelectField(_l('Type'), choices=VENDORS or [])
     custom_type = StringField(_l('Type'))
     community = StringField(_l('Community'))
