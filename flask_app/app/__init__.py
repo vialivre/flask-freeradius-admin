@@ -3,6 +3,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_babel import Babel, _
+from flask_caching import Cache
 
 from app.config import Config
 
@@ -18,6 +19,8 @@ login = LoginManager()
 login.init_app(app)
 login.login_view = 'login'
 login.login_message = _('Please login to access this page.')
+
+cache = Cache(app)
 
 
 @babel.localeselector

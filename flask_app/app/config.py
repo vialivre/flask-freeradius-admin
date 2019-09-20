@@ -24,3 +24,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     LANGUAGES = ['en', 'pt_BR']
+
+    CACHE_TYPE = 'simple'

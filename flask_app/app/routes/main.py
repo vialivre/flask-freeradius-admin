@@ -1,6 +1,6 @@
 import os.path
 
-from app import app, db
+from app import app, db, cache
 from flask import render_template, request, jsonify
 from flask_login import login_required
 
@@ -42,6 +42,7 @@ def setup():
         db.session.commit()
 
 @app.route('/_filter_attributes')
+@cache.cached(timeout=1800, query_string=True)
 @login_required
 def _filter_attributes():
     dict_path = app.config.get('DICTIONARIES_PATH')
@@ -59,6 +60,7 @@ def _filter_attributes():
     return jsonify(attributes) if dict_data else jsonify([])
 
 @app.route('/_filter_values')
+@cache.cached(timeout=1800, query_string=True)
 @login_required
 def _filter_values():
     dict_path = app.config.get('DICTIONARIES_PATH')
