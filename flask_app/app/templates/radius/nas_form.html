@@ -6,9 +6,9 @@
         <i class="fa fa-network-wired icon-gradient bg-happy-itmeo"></i>
       </div>
       <div>
-        {{ _('NAS') }}
+        {{ _("NAS") }}
         <div class="page-title-subheading">
-          {{ _('NAS details and management.') }}
+          {{ _("NAS details and management.") }}
         </div>
       </div>
     </div>
@@ -18,12 +18,12 @@
         <span class="btn-icon-wrapper pr-2 opacity-7">
           <i class="fa fa-plus fa-w-20"></i>
         </span>
-        <span>{{ _('Add') }}</span>
+        <span>{{ _("Add") }}</span>
         {% elif action == 'edit' %}
         <span class="btn-icon-wrapper pr-2 opacity-7">
           <i class="fa fa-edit fa-w-20"></i>
         </span>
-        <span>{{ _('Edit') }}</span>
+        <span>{{ _("Edit") }}</span>
         {% endif %}
       </button>
     </div>
@@ -36,7 +36,7 @@
     <div class="col-md-6">
       <div class="main-card mb-3 card">
         <div class="card-body">
-          <h5 class="card-title">{{ _('Main info') }}</h5>
+          <h5 class="card-title">{{ _("Main info") }}</h5>
           <div class="form-group">
             <label for="name">{{ form.name.label }}</label>
             {% if form.errors.get('name') %}
@@ -59,14 +59,7 @@
           </div>
           <div class="form-group">
             <label for="ports">{{ form.ports.label }}</label>
-            {% if form.errors.get('ports') %}
-            {{ form.ports(class='form-control is-invalid') }}
-            <div class="invalid-feedback">
-              {{ form_errors.get("ports")[0] }}
-            </div>
-            {% else %}
             {{ form.ports(class='form-control') }}
-            {% endif %}
           </div>
           <div class="form-group">
             <label for="secret">{{ form.secret.label }}</label>
@@ -86,23 +79,21 @@
     <div class="col-md-6">
       <div class="main-card mb-3 card">
         <div class="card-body">
-          <h5 class="card-title">{{ _('More details') }}</h5>
+          <h5 class="card-title">{{ _("More details") }}</h5>
           <div class="form-group">
             <label for="short_name">{{ form.short_name.label }}</label>
             {{ form.short_name(class='form-control') }}
           </div>
           <div class="form-group">
             <label for="type">{{ form.type.label }}</label>
-            {% if form.VENDORS %}
-              {% if form.errors.get('type') %}
-              {{ form.type(class='form-control is-invalid') }}
-              <div class="invalid-feedback">
-                {{ form_errors.get("type")[0] }}
-              </div>
-              {% else %}
-              {{ form.type(class='form-control') }}
-              {% endif %}
+            {% if form.VENDORS %} {% if form.errors.get('type') %}
+            {{ form.type(class='form-control is-invalid') }}
+            <div class="invalid-feedback">
+              {{ form_errors.get("type")[0] }}
+            </div>
             {% else %}
+            {{ form.type(class='form-control') }}
+            {% endif %} {% else %}
             {{ form.custom_type(class='form-control')}}
             {% endif %}
           </div>

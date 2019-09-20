@@ -39,13 +39,6 @@ def setup():
         db.session.add(RadUserGroup(
             username='admin', groupname='user', priority=1
         ))
-
-        db.session.add(RadCheck(
-            username='admin',
-            attribute='Profile-Name',
-            op=':=',
-            value='user'
-        ))
         db.session.commit()
 
 @app.route('/_filter_attributes')
