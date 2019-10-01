@@ -54,7 +54,14 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="group">{{ form.group.label }}</label>
+                {% if 'group' in form_errors %}
+                {{ form.group(class='form-control is-invalid') }}
+                <div class="invalid-feedback">
+                  {{ form_errors["group"][0] }}
+                </div>
+                {% else %}
                 {{ form.group(class='form-control') }}
+                {% endif %}
               </div>
             </div>
           </div>

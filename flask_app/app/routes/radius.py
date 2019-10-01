@@ -201,7 +201,6 @@ def edit_group(group_id):
 @has_access()
 def delete_group(group_id):
     group = Group.query.get_or_404(group_id)
-    db.session.delete(group)
 
     users_group = db.session.query(RadUserGroup).filter_by(
         groupname=group.name
@@ -221,6 +220,7 @@ def delete_group(group_id):
     for reply in group_replies:
         db.session.delete(reply)
 
+    db.session.delete(group)
     db.session.commit()
     return redirect(url_for('list_groups'))
 
@@ -388,7 +388,7 @@ def list_users():
             ).first()
         else:
             record.group = None
-        
+
         record.checks = db.session.query(RadCheck).filter_by(
             username=record.username
         ).count()
@@ -467,12 +467,13 @@ def edit_user(user_id):
     user_group = db.session.query(RadUserGroup).filter_by(
         username=user.username
     ).first()
+    groups = Group.query.all()
+
     if user_group:
-        group = Group.query.filter_by(name=user_group.groupname).first()
+        filter_groups = [g for g in groups if g.name == user_group.groupname]
+        group = filter_groups[0] if len(filter_groups) else None
     else:
         group = None
-    
-    groups = Group.query.all()
 
     form = UserForm()
     form.group.choices = [(group.name, group.name) for group in groups]
@@ -505,7 +506,7 @@ def edit_user(user_id):
                 priority=0
             ))
         elif group and group.name != form.group.data:
-            db.session.delete(group)
+            db.session.delete(user_group)
             db.session.add(RadUserGroup(
                 username=form.username.data,
                 groupname=form.group.data,
@@ -518,23 +519,36 @@ def edit_user(user_id):
             RadCheck.attribute == 'Auth-Type'
         ).all()
         if not len(user_access_list) and not form.active.data:
+            # user is disabled and auth-type is default
+            # should change auth-type to 'reject'
             db.session.add(RadCheck(
                 username=user.username,
                 attribute='Auth-Type',
                 op=':=',
                 value='Reject'
             ))
+        elif not len(user_access_list) and form.active.data:
+            # user is enabled and auth-type is default
+            pass
         elif len(user_access_list):
+            # auth-type is not default
             is_disabled = 'Reject' in [a.value for a in user_access_list]
-            print(form.active.data)
             if not form.active.data and not is_disabled:
+                # auth-type is 'accept' but user is disabled
                 db.session.add(RadCheck(
                     username=user.username,
                     attribute='Auth-Type',
                     op=':=',
                     value='Reject'
                 ))
+            elif not form.active.data and is_disabled:
+                # auth-type is 'reject' and user is disabled
+                pass
+            elif form.active.data and not is_disabled:
+                # auth-type is 'accept' and user is not disabled
+                pass
             elif form.active.data and is_disabled:
+                # auth-type is 'reject' but user is not disabled
                 for access in user_access_list:
                     if access.value == 'Reject':
                         db.session.delete(access)
@@ -568,7 +582,6 @@ def edit_user(user_id):
 @has_access()
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
-    db.session.delete(user)
 
     user_group = db.session.query(RadUserGroup).filter_by(
         username=user.name
@@ -588,6 +601,7 @@ def delete_user(user_id):
     for reply in user_replies:
         db.session.delete(reply)
 
+    db.session.delete(user)
     db.session.commit()
     return redirect(url_for('list_users'))
 
