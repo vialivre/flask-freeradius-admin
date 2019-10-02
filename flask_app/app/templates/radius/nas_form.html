@@ -47,19 +47,8 @@
             {% endif %}
           </div>
           <div class="form-group">
-            <label for="server">{{ form.server.label }}</label>
-            {% if form.errors.get('server') %}
-            {{ form.server(class='form-control is-invalid') }}
-            <div class="invalid-feedback">
-              {{ form_errors.get("server")[0] }}
-            </div>
-            {% else %}
-            {{ form.server(class='form-control') }}
-            {% endif %}
-          </div>
-          <div class="form-group">
-            <label for="ports">{{ form.ports.label }}</label>
-            {{ form.ports(class='form-control') }}
+            <label for="short_name">{{ form.short_name.label }}</label>
+            {{ form.short_name(class='form-control') }}
           </div>
           <div class="form-group">
             <label for="secret">{{ form.secret.label }}</label>
@@ -71,18 +60,6 @@
             {% else %}
             {{ form.secret(class='form-control') }}
             {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6">
-      <div class="main-card mb-3 card">
-        <div class="card-body">
-          <h5 class="card-title">{{ _("More details") }}</h5>
-          <div class="form-group">
-            <label for="short_name">{{ form.short_name.label }}</label>
-            {{ form.short_name(class='form-control') }}
           </div>
           <div class="form-group">
             <label for="type">{{ form.type.label }}</label>
@@ -96,6 +73,22 @@
             {% endif %} {% else %}
             {{ form.custom_type(class='form-control')}}
             {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="main-card mb-3 card">
+        <div class="card-body">
+          <h5 class="card-title">{{ _("More details") }}</h5>
+          <div class="form-group">
+            <label for="server">{{ form.server.label }}</label>
+            {{ form.server(class='form-control') }}
+          </div>
+          <div class="form-group">
+            <label for="ports">{{ form.ports.label }}</label>
+            {{ form.ports(class='form-control') }}
           </div>
           <div class="form-group">
             <label for="community">{{ form.community.label }}</label>
