@@ -20,6 +20,9 @@ services:
       context: ./freeradius
       dockerfile: Dockerfile
     restart: on-failure
+    ports:
+      - 1812:1812/udp
+      - 1813:1813/udp
     depends_on:
       - db
     networks:
