@@ -301,7 +301,7 @@ def download_groups_json():
                 })
 
             data.append({
-                'id': row.id, 'nane': row.name,
+                'id': row.id, 'name': row.name,
                 'description': row.description,
                 'checks': checks_data,
                 'replies': replies_data
@@ -568,6 +568,104 @@ def list_users():
         table_records=records.items,
         pagination=records
     )
+
+@app.route('/users/csv')
+@has_access()
+def download_users_csv():
+    filedir = '/tmp'
+    filename = str(uuid.uuid4()) + '.csv'
+    filepath = os.path.join(filedir, filename)
+
+    users_list = User.query.all()
+
+    if not len(users_list):
+        flash(_('There are no records to export.'), 'error')
+        return redirect(url_for('list_users'))
+    
+    with open(filepath, 'w') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=';', quotechar='"')
+        headers = [
+            'id', 'username', 'email', 'name',
+            'phone', 'address', 'active',
+            'has_access', 'checks_count', 'replies_count'
+        ]
+        csv_writer.writerow(headers)
+
+        for row in users_list:
+            checks = db.session.query(RadCheck).filter_by(
+                username=row.username
+            ).count()
+            replies = db.session.query(RadReply).filter_by(
+                username=row.username
+            ).count()
+
+            csv_writer.writerow([
+                row.id, row.username, row.email, row.name,
+                row.phone, row.address, row.active,
+                row.has_access, checks, replies
+            ])
+        
+    return send_from_directory(
+        filedir,
+        filename,
+        as_attachment=True
+    )
+
+@app.route('/users/json')
+@has_access()
+def download_users_json():
+    filedir = '/tmp'
+    filename = str(uuid.uuid4()) + '.json'
+    filepath = os.path.join(filedir, filename)
+
+    users_list = User.query.all()
+
+    if not len(users_list):
+        flash(_('There are no records to export.'), 'error')
+        return redirect(url_for('list_users'))
+    
+    with open(filepath, 'w') as json_file:
+        data = []
+        for row in users_list:
+            checks_data = []
+            checks = db.session.query(RadCheck).filter_by(
+                username=row.username
+            ).all()
+            for check in checks:
+                checks_data.append({
+                    'id': check.id, 'username': check.username,
+                    'attribute': check.attribute, 'op': check.op,
+                    'value': check.value
+                })
+
+            replies_data = []
+            replies = db.session.query(RadReply).filter_by(
+                username=row.username
+            ).all()
+            for reply in replies:
+                replies_data.append({
+                    'id': reply.id, 'username': reply.username,
+                    'attribute': reply.attribute, 'op': reply.op,
+                    'value': reply.value
+                })
+
+            data.append({
+                'id': row.id, 'username': row.username,
+                'email': row.email, 'name': row.name,
+                'phone': row.phone, 'address': row.address,
+                'active': row.active, 'has_access': row.has_access,
+                'checks': checks_data,
+                'replies': replies_data
+            })
+        
+        json.dump(data, json_file, indent='\t')
+        
+    return send_from_directory(
+        filedir,
+        filename,
+        as_attachment=True
+    )
+
 
 @app.route('/users/new', methods=['GET', 'POST'])
 @has_access()
