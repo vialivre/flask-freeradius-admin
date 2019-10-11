@@ -6,7 +6,8 @@ import csv
 from app import app, db
 from flask import (
     render_template, flash, redirect,
-    url_for, request, send_from_directory
+    url_for, request, send_from_directory,
+    after_this_request
 )
 from flask_babel import _
 from sqlalchemy.sql.expression import desc
@@ -61,6 +62,14 @@ def download_nas_csv():
     filename = str(uuid.uuid4()) + '.csv'
     filepath = os.path.join(filedir, filename)
 
+    @after_this_request
+    def cleanup(response):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print(e)
+        return response
+
     nas_list = db.session.query(Nas).all()
 
     if not len(nas_list):
@@ -95,6 +104,14 @@ def download_nas_json():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.json'
     filepath = os.path.join(filedir, filename)
+
+    @after_this_request
+    def cleanup(response):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print(e)
+        return response
 
     nas_list = db.session.query(Nas).all()
 
@@ -229,6 +246,14 @@ def download_groups_csv():
     filename = str(uuid.uuid4()) + '.csv'
     filepath = os.path.join(filedir, filename)
 
+    @after_this_request
+    def cleanup(response):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print(e)
+        return response
+
     groups_list = Group.query.all()
 
     if not len(groups_list):
@@ -268,6 +293,14 @@ def download_groups_json():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.json'
     filepath = os.path.join(filedir, filename)
+
+    @after_this_request
+    def cleanup(response):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print(e)
+        return response
 
     groups_list = Group.query.all()
 
@@ -576,6 +609,14 @@ def download_users_csv():
     filename = str(uuid.uuid4()) + '.csv'
     filepath = os.path.join(filedir, filename)
 
+    @after_this_request
+    def cleanup(response):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print(e)
+        return response
+
     users_list = User.query.all()
 
     if not len(users_list):
@@ -617,6 +658,14 @@ def download_users_json():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.json'
     filepath = os.path.join(filedir, filename)
+
+    @after_this_request
+    def cleanup(response):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print(e)
+        return response
 
     users_list = User.query.all()
 
