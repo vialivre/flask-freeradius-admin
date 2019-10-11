@@ -28,7 +28,6 @@
           aria-haspopup="true"
           aria-expanded="false"
           class="btn-shadow dropdown-toggle btn btn-info"
-          disabled
         >
           <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-file-export fa-w-20"></i>
@@ -43,7 +42,7 @@
         >
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a href="javascript:void(0);" class="nav-link">
+              <a href="{{ url_for('download_groups_csv') }}" class="nav-link">
                 <i class="nav-link-icon fa fa-file-csv"></i>
                 <span>
                   CSV
@@ -51,7 +50,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a href="javascript:void(0);" class="nav-link">
+              <a href="{{ url_for('download_groups_json') }}" class="nav-link">
                 <i class="nav-link-icon fa fa-file-code"></i>
                 <span>
                   JSON

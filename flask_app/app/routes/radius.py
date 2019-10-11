@@ -222,6 +222,99 @@ def list_groups():
         pagination=records
     )
 
+@app.route('/groups/csv')
+@has_access()
+def download_groups_csv():
+    filedir = '/tmp'
+    filename = str(uuid.uuid4()) + '.csv'
+    filepath = os.path.join(filedir, filename)
+
+    groups_list = Group.query.all()
+
+    if not len(groups_list):
+        flash(_('There are no records to export.'), 'error')
+        return redirect(url_for('list_groups'))
+    
+    with open(filepath, 'w') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=';', quotechar='"')
+        headers = [
+            'id', 'name', 'description', 
+            'checks_count', 'replies_count'
+        ]
+        csv_writer.writerow(headers)
+
+        for row in groups_list:
+            checks = db.session.query(RadGroupCheck).filter_by(
+                groupname=row.name
+            ).count()
+            replies = db.session.query(RadGroupReply).filter_by(
+                groupname=row.name
+            ).count()
+
+            csv_writer.writerow([
+                row.id, row.name, row.description,
+                checks, replies
+            ])
+        
+    return send_from_directory(
+        filedir,
+        filename,
+        as_attachment=True
+    )
+
+@app.route('/groups/json')
+@has_access()
+def download_groups_json():
+    filedir = '/tmp'
+    filename = str(uuid.uuid4()) + '.json'
+    filepath = os.path.join(filedir, filename)
+
+    groups_list = Group.query.all()
+
+    if not len(groups_list):
+        flash(_('There are no records to export.'), 'error')
+        return redirect(url_for('list_groups'))
+    
+    with open(filepath, 'w') as json_file:
+        data = []
+        for row in groups_list:
+            checks_data = []
+            checks = db.session.query(RadGroupCheck).filter_by(
+                groupname=row.name
+            ).all()
+            for check in checks:
+                checks_data.append({
+                    'id': check.id, 'groupname': check.groupname,
+                    'attribute': check.attribute, 'op': check.op,
+                    'value': check.value
+                })
+
+            replies_data = []
+            replies = db.session.query(RadGroupReply).filter_by(
+                groupname=row.name
+            ).all()
+            for reply in replies:
+                replies_data.append({
+                    'id': reply.id, 'groupname': reply.groupname,
+                    'attribute': reply.attribute, 'op': reply.op,
+                    'value': reply.value
+                })
+
+            data.append({
+                'id': row.id, 'nane': row.name,
+                'description': row.description,
+                'checks': checks_data,
+                'replies': replies_data
+            })
+        
+        json.dump(data, json_file, indent='\t')
+        
+    return send_from_directory(
+        filedir,
+        filename,
+        as_attachment=True
+    )
+
 @app.route('/groups/new', methods=['GET', 'POST'])
 @has_access()
 def new_group():
