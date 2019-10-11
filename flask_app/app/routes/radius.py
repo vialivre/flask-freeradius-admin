@@ -1,7 +1,11 @@
+import os.path
+import uuid
+import csv
+
 from app import app, db
 from flask import (
     render_template, flash, redirect,
-    url_for, request
+    url_for, request, send_from_directory
 )
 from flask_babel import _
 from sqlalchemy.sql.expression import desc
@@ -16,6 +20,7 @@ from app.models.radius import (
 )
 from app.models.auth import Group, User
 from app.utils import has_access
+
 
 # Dashboard
 @app.route('/')
@@ -46,6 +51,41 @@ def list_nas():
         table_headers=table_headers,
         table_records=records.items,
         pagination=records
+    )
+
+@app.route('/nas/csv')
+@has_access()
+def download_nas_csv():
+    filedir = '/tmp'
+    filename = str(uuid.uuid4()) + '.csv'
+    filepath = os.path.join(filedir, filename)
+
+    nas_list = db.session.query(Nas).all()
+
+    if not len(nas_list):
+        flash(_('There are no records to export.'), 'error')
+        return redirect(url_for('list_nas'))
+    
+    with open(filepath, 'w') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=';', quotechar='"')
+        headers = [
+            'id', 'nasname', 'shortname',
+            'type', 'ports', 'secret',
+            'server', 'community', 'description'
+        ]
+        csv_writer.writerow(headers)
+
+        for row in nas_list:
+            csv_writer.writerow([
+                row.id, row.nasname, row.shortname,
+                row.type, row.ports, row.secret,
+                row.server, row.community, row.description
+            ])
+        
+    return send_from_directory(
+        filedir,
+        filename,
+        as_attachment=True
     )
 
 @app.route('/nas/new', methods=['GET', 'POST'])
