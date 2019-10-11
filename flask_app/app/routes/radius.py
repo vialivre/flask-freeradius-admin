@@ -1,5 +1,6 @@
 import os.path
 import uuid
+import json
 import csv
 
 from app import app, db
@@ -81,6 +82,38 @@ def download_nas_csv():
                 row.type, row.ports, row.secret,
                 row.server, row.community, row.description
             ])
+        
+    return send_from_directory(
+        filedir,
+        filename,
+        as_attachment=True
+    )
+
+@app.route('/nas/json')
+@has_access()
+def download_nas_json():
+    filedir = '/tmp'
+    filename = str(uuid.uuid4()) + '.json'
+    filepath = os.path.join(filedir, filename)
+
+    nas_list = db.session.query(Nas).all()
+
+    if not len(nas_list):
+        flash(_('There are no records to export.'), 'error')
+        return redirect(url_for('list_nas'))
+    
+    with open(filepath, 'w') as json_file:
+        data = []
+        for row in nas_list:
+            data.append({
+                'id': row.id, 'nasname': row.nasname,
+                'shortname': row.shortname, 'type': row.type,
+                'ports': row.ports, 'secret': row.secret,
+                'server': row.server, 'community': row.community,
+                'description': row.description
+            })
+        
+        json.dump(data, json_file, indent='\t')
         
     return send_from_directory(
         filedir,
