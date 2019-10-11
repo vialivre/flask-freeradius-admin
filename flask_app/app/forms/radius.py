@@ -10,7 +10,7 @@ from wtforms import (
     PasswordField,
     BooleanField
 )
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 from flask_babel import lazy_gettext as _l
 
 from app.utils import OPERATORS, read_vendors
@@ -34,7 +34,8 @@ class NasForm(FlaskForm):
         _l('Server')
     )
     ports = IntegerField(
-        _l('Ports')
+        _l('Ports'),
+        validators=[Optional()]
     )
     secret = StringField(
         _l('Secret'),
@@ -44,7 +45,7 @@ class NasForm(FlaskForm):
         _l('Short Name'),
         validators=[DataRequired(_l('This field is required.'))]
     )
-    type = SelectField(_l('Type'), choices=VENDORS or [])
+    type = NoValidationSelectField(_l('Type'), choices=VENDORS or [])
     custom_type = StringField(_l('Type'))
     community = StringField(_l('Community'))
     description = TextAreaField(_l('Description'))
