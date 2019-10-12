@@ -7,4 +7,4 @@ while true; do
     echo Upgrade command failed, retrying in 5 secs...
     sleep 5
 done
-exec gunicorn -b :5000 --access-logfile - --error-logfile - app:app
+exec gunicorn -b :5000 --access-logfile /var/log/flask_freeradius_admin/access.log --error-logfile /var/log/flask_freeradius_admin/status.log app:app

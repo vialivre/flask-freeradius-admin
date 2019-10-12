@@ -30,6 +30,7 @@ def login():
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember.data)
+        app.logger.info('User %s logged in', user.username)
         
         next_page = request.args.get('next')
         if not next_page:
@@ -40,5 +41,6 @@ def login():
 
 @app.route('/logout')
 def logout():
+    app.logger.info('User %s logged out', current_user.username)
     logout_user()
     return redirect(url_for('index'))

@@ -16,6 +16,7 @@ from app.utils import read_dictionary
 def setup():
     # create admin user
     if not User.query.count():
+        app.logger.info('No users found. Creating new admin user.')
         admin = User(
             username='admin', password='freeradius@admin',
             name='Administrative User', has_access=True
@@ -33,6 +34,7 @@ def setup():
 
     # create default users groups
     if not Group.query.count():
+        app.logger.info('No groups found. Creating default user group.')
         db.session.add(Group(name='user', description='Default user group'))
 
         # create default parameters for groups

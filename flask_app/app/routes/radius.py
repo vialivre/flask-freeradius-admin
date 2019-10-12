@@ -3,7 +3,7 @@ import uuid
 import json
 import csv
 
-from app import app, db
+from app import app, db, cache
 from flask import (
     render_template, flash, redirect,
     url_for, request, send_from_directory,
@@ -57,6 +57,7 @@ def list_nas():
 
 @app.route('/nas/csv')
 @has_access()
+@cache.cached(timeout=300)
 def download_nas_csv():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.csv'
@@ -66,8 +67,9 @@ def download_nas_csv():
     def cleanup(response):
         try:
             os.remove(filepath)
+            app.logger.debug('Deleted CSV file: %s', filename)
         except Exception as e:
-            print(e)
+            app.logger.error('Error deleting CSV file: %s', str(e))
         return response
 
     nas_list = db.session.query(Nas).all()
@@ -92,6 +94,8 @@ def download_nas_csv():
                 row.server, row.community, row.description
             ])
         
+        app.logger.info('Generating new CSV report: %s', filename)
+        
     return send_from_directory(
         filedir,
         filename,
@@ -100,6 +104,7 @@ def download_nas_csv():
 
 @app.route('/nas/json')
 @has_access()
+@cache.cached(timeout=300)
 def download_nas_json():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.json'
@@ -109,8 +114,9 @@ def download_nas_json():
     def cleanup(response):
         try:
             os.remove(filepath)
+            app.logger.debug('Deleted JSON file: %s', filename)
         except Exception as e:
-            print(e)
+            app.logger.error('Error deleting JSON file: %s', str(e))
         return response
 
     nas_list = db.session.query(Nas).all()
@@ -131,6 +137,8 @@ def download_nas_json():
             })
         
         json.dump(data, json_file, indent='\t')
+
+        app.logger.info('Generating new JSON report: %s', filename)
         
     return send_from_directory(
         filedir,
@@ -158,7 +166,7 @@ def new_nas():
         flash(_('New NAS added'), 'success')
         return redirect(url_for('list_nas'))
     elif form.errors:
-        print(form.errors)
+        app.logger.debug('Create NAS form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
     
     return render_template(
@@ -187,6 +195,7 @@ def edit_nas(nas_id):
         flash(_('NAS data updated'), 'success')
         return redirect(url_for('list_nas'))
     elif form.errors:
+        app.logger.debug('Update NAS form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
     elif request.method == 'GET':
         form.name.data = nas.nasname
@@ -241,6 +250,7 @@ def list_groups():
 
 @app.route('/groups/csv')
 @has_access()
+@cache.cached(timeout=300)
 def download_groups_csv():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.csv'
@@ -250,8 +260,9 @@ def download_groups_csv():
     def cleanup(response):
         try:
             os.remove(filepath)
+            app.logger.debug('Deleted CSV file: %s', filename)
         except Exception as e:
-            print(e)
+            app.logger.error('Error deleting CSV file: %s', str(e))
         return response
 
     groups_list = Group.query.all()
@@ -280,6 +291,8 @@ def download_groups_csv():
                 row.id, row.name, row.description,
                 checks, replies
             ])
+
+        app.logger.info('Generating new CSV report: %s', filename)
         
     return send_from_directory(
         filedir,
@@ -289,6 +302,7 @@ def download_groups_csv():
 
 @app.route('/groups/json')
 @has_access()
+@cache.cached(timeout=300)
 def download_groups_json():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.json'
@@ -298,8 +312,9 @@ def download_groups_json():
     def cleanup(response):
         try:
             os.remove(filepath)
+            app.logger.debug('Deleted JSON file: %s', filename)
         except Exception as e:
-            print(e)
+            app.logger.error('Error deleting JSON file: %s', str(e))
         return response
 
     groups_list = Group.query.all()
@@ -341,6 +356,8 @@ def download_groups_json():
             })
         
         json.dump(data, json_file, indent='\t')
+
+        app.logger.info('Generating new JSON report: %s', filename)
         
     return send_from_directory(
         filedir,
@@ -362,6 +379,7 @@ def new_group():
         flash(_('New group added'), 'success')
         return redirect(url_for('list_groups'))
     elif form.errors:
+        app.logger.debug('Create Group form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
 
     return render_template(
@@ -384,6 +402,7 @@ def edit_group(group_id):
         flash(_('Group data updated'), 'success')
         return redirect(url_for('list_groups'))
     elif form.errors:
+        app.logger.debug('Update Group form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
     elif request.method == 'GET':
         form.name.data = group.name
@@ -400,27 +419,32 @@ def edit_group(group_id):
 @has_access()
 def delete_group(group_id):
     group = Group.query.get_or_404(group_id)
+    app.logger.debug('Deleting group %s...', group_id)
 
     users_group = db.session.query(RadUserGroup).filter_by(
         groupname=group.name
     ).all()
     for user_group in users_group:
         db.session.delete(user_group)
+    app.logger.debug('Deleted all relations of users with group %s', group_id)
 
     group_checks = db.session.query(RadGroupCheck).filter_by(
         groupname=group.name
     ).all()
     for check in group_checks:
         db.session.delete(check)
+    app.logger.debug('Deleted all Checks of group %s', group_id)
 
     group_replies = db.session.query(RadGroupReply).filter_by(
         groupname=group.name
     ).all()
     for reply in group_replies:
         db.session.delete(reply)
+    app.logger.debug('Deleted all Replies of group %s', group_id)
 
     db.session.delete(group)
     db.session.commit()
+    app.logger.debug('Completed deleting group %s', group_id)
     return redirect(url_for('list_groups'))
 
 # Group checks and replies pages
@@ -464,6 +488,7 @@ def new_group_check(group_id):
         data_type = form.processed_fields.data
 
         if data_type == 'ca-cv':
+            app.logger.debug('Adding group check with CUSTOM attribute and CUSTOM value')
             db.session.add(RadGroupCheck(
                 groupname=group.name,
                 attribute=form.custom_attribute.data,
@@ -472,6 +497,7 @@ def new_group_check(group_id):
             ))
             db.session.commit()
         elif data_type == 'sa-cv':
+            app.logger.debug('Adding group check with SELECTED attribute and CUSTOM value')
             db.session.add(RadGroupCheck(
                 groupname=group.name,
                 attribute=form.attribute.data,
@@ -480,6 +506,7 @@ def new_group_check(group_id):
             ))
             db.session.commit()
         elif data_type == 'sa-sv':
+            app.logger.debug('Adding group check with SELECTED attribute and SELECTED value')
             db.session.add(RadGroupCheck(
                 groupname=group.name,
                 attribute=form.attribute.data,
@@ -492,6 +519,7 @@ def new_group_check(group_id):
             return redirect(url_for('new_group_check', group_id=group_id))
         return redirect(url_for('group_details', group_id=group_id))
     elif form.errors:
+        app.logger.debug('Create Group Check form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
 
     return render_template(
@@ -512,6 +540,7 @@ def new_group_reply(group_id):
         data_type = form.processed_fields.data
 
         if data_type == 'ca-cv':
+            app.logger.debug('Adding group reply with CUSTOM attribute and CUSTOM value')
             db.session.add(RadGroupReply(
                 groupname=group.name,
                 attribute=form.custom_attribute.data,
@@ -520,6 +549,7 @@ def new_group_reply(group_id):
             ))
             db.session.commit()
         elif data_type == 'sa-cv':
+            app.logger.debug('Adding group reply with SELECTED attribute and CUSTOM value')
             db.session.add(RadGroupReply(
                 groupname=group.name,
                 attribute=form.attribute.data,
@@ -528,6 +558,7 @@ def new_group_reply(group_id):
             ))
             db.session.commit()
         elif data_type == 'sa-sv':
+            app.logger.debug('Adding group reply with SELECTED attribute and SELECTED value')
             db.session.add(RadGroupReply(
                 groupname=group.name,
                 attribute=form.attribute.data,
@@ -540,6 +571,7 @@ def new_group_reply(group_id):
             return redirect(url_for('new_group_reply', group_id=group_id))
         return redirect(url_for('group_details', group_id=group_id))
     elif form.errors:
+        app.logger.debug('Create Group Reply form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
 
     return render_template(
@@ -604,6 +636,7 @@ def list_users():
 
 @app.route('/users/csv')
 @has_access()
+@cache.cached(timeout=300)
 def download_users_csv():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.csv'
@@ -613,8 +646,9 @@ def download_users_csv():
     def cleanup(response):
         try:
             os.remove(filepath)
+            app.logger.debug('Deleted CSV file: %s', filename)
         except Exception as e:
-            print(e)
+            app.logger.error('Error deleting CSV file: %s', str(e))
         return response
 
     users_list = User.query.all()
@@ -645,6 +679,8 @@ def download_users_csv():
                 row.phone, row.address, row.active,
                 row.has_access, checks, replies
             ])
+
+        app.logger.info('Generating new CSV report: %s', filename)
         
     return send_from_directory(
         filedir,
@@ -654,6 +690,7 @@ def download_users_csv():
 
 @app.route('/users/json')
 @has_access()
+@cache.cached(timeout=300)
 def download_users_json():
     filedir = '/tmp'
     filename = str(uuid.uuid4()) + '.json'
@@ -663,8 +700,9 @@ def download_users_json():
     def cleanup(response):
         try:
             os.remove(filepath)
+            app.logger.debug('Deleted JSON file: %s', filename)
         except Exception as e:
-            print(e)
+            app.logger.error('Error deleting JSON file: %s', str(e))
         return response
 
     users_list = User.query.all()
@@ -708,6 +746,8 @@ def download_users_json():
             })
         
         json.dump(data, json_file, indent='\t')
+
+        app.logger.info('Generating new JSON report: %s', filename)
         
     return send_from_directory(
         filedir,
@@ -737,12 +777,18 @@ def new_user():
         )
         user.hash_password()
         db.session.add(user)
+        app.logger.debug('Creating new user %s', user.username)
 
         db.session.add(RadUserGroup(
             username=form.username.data,
             groupname=form.group.data,
             priority=0
         ))
+        app.logger.debug(
+            'Creating relation user-group for user %s and group %s',
+            user.username,
+            form.group.data
+        )
         
         db.session.add(RadCheck(
             username=form.username.data,
@@ -750,6 +796,7 @@ def new_user():
             op=':=',
             value=form.password.data
         ))
+        app.logger.debug('Creating Cleartext-Password user check')
 
         if not form.active.data:
             db.session.add(RadCheck(
@@ -758,12 +805,14 @@ def new_user():
                 op=':=',
                 value='Reject'
             ))
+            app.logger.debug('Creating Auth-Type Reject check for disabled user')
 
         db.session.commit()
 
         flash(_('New user added'), 'success')
         return redirect(url_for('list_users'))
     elif form.errors:
+        app.logger.debug('Create User form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
 
     return render_template(
@@ -781,12 +830,15 @@ def edit_user(user_id):
         username=user.username
     ).first()
     groups = Group.query.all()
+    app.logger.debug('Updating user %s...', user.username)
 
     if user_group:
         filter_groups = [g for g in groups if g.name == user_group.groupname]
         group = filter_groups[0] if len(filter_groups) else None
+        app.logger.debug('User %s has group: %s', user.username, group.id)
     else:
         group = None
+        app.logger.debug('User %s has no group', user.username)
 
     form = UserForm()
     form.group.choices = [(group.name, group.name) for group in groups]
@@ -810,6 +862,7 @@ def edit_user(user_id):
                 RadCheck.attribute == 'Cleartext-Password'
             ).first()
             pass_att.value = form.password.data
+            app.logger.debug("Updating user's password for %s", user.username)
 
         # insert or update group
         if not group and form.group.data:
@@ -818,13 +871,24 @@ def edit_user(user_id):
                 groupname=form.group.data,
                 priority=0
             ))
+            app.logger.debug(
+                'Creating new user-group relation for user %s and group %s',
+                user.username,
+                form.group.data
+            )
         elif group and group.name != form.group.data:
             db.session.delete(user_group)
+            app.logger.debug('Removing old user-group relation')
             db.session.add(RadUserGroup(
                 username=form.username.data,
                 groupname=form.group.data,
                 priority=0
             ))
+            app.logger.debug(
+                'Creating new user-group relation for user %s and group %s',
+                user.username,
+                form.group.data
+            )
 
         # update access
         user_access_list = db.session.query(RadCheck).filter(
@@ -840,9 +904,10 @@ def edit_user(user_id):
                 op=':=',
                 value='Reject'
             ))
+            app.logger.debug('User has no Auth-Type checks, creating new Reject')
         elif not len(user_access_list) and form.active.data:
             # user is enabled and auth-type is default
-            pass
+            app.logger.debug('User has no Auth-Type checks, pass...')
         elif len(user_access_list):
             # auth-type is not default
             is_disabled = 'Reject' in [a.value for a in user_access_list]
@@ -854,23 +919,26 @@ def edit_user(user_id):
                     op=':=',
                     value='Reject'
                 ))
+                app.logger.debug('User has no Auth-Type Reject checks, creating new Reject')
             elif not form.active.data and is_disabled:
                 # auth-type is 'reject' and user is disabled
-                pass
+                app.logger.debug('User has Auth-Type Reject, pass...')
             elif form.active.data and not is_disabled:
                 # auth-type is 'accept' and user is not disabled
-                pass
+                app.logger.debug('User has no Auth-Type Reject, pass...')
             elif form.active.data and is_disabled:
                 # auth-type is 'reject' but user is not disabled
                 for access in user_access_list:
                     if access.value == 'Reject':
                         db.session.delete(access)
+                app.logger.debug('User has Auth-Type Reject, removing it')
 
         db.session.commit()
 
         flash(_('User data updated'), 'success')
         return redirect(url_for('list_users'))
     elif form.errors:
+        app.logger.debug('Update User form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
     else:
         form.username.data = user.username
@@ -895,27 +963,32 @@ def edit_user(user_id):
 @has_access()
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
+    app.logger.debug('Deleting user %s...', user.username)
 
     user_group = db.session.query(RadUserGroup).filter_by(
         username=user.name
     ).first()
     if user_group:
         db.session.delete(user_group)
+    app.logger.debug('Deleted all user-group relations for user %s', user.username)
 
     user_checks = db.session.query(RadCheck).filter_by(
         username=user.username
     ).all()
     for check in user_checks:
         db.session.delete(check)
+    app.logger.debug('Deleted all checks for user %s', user.username)
 
     user_replies = db.session.query(RadReply).filter_by(
         username=user.username
     ).all()
     for reply in user_replies:
         db.session.delete(reply)
+    app.logger.debug('Deleted all replies for user %s', user.username)
 
     db.session.delete(user)
     db.session.commit()
+    app.logger.debug('Completed deleting user %s', user.username)
     return redirect(url_for('list_users'))
 
 # User checks and replies pages
@@ -959,6 +1032,7 @@ def new_user_check(user_id):
         data_type = form.processed_fields.data
 
         if data_type == 'ca-cv':
+            app.logger.debug('Adding user check with CUSTOM attribute and CUSTOM value')
             db.session.add(RadCheck(
                 username=user.username,
                 attribute=form.custom_attribute.data,
@@ -967,6 +1041,7 @@ def new_user_check(user_id):
             ))
             db.session.commit()
         elif data_type == 'sa-cv':
+            app.logger.debug('Adding user check with SELECTED attribute and CUSTOM value')
             db.session.add(RadCheck(
                 username=user.username,
                 attribute=form.attribute.data,
@@ -975,6 +1050,7 @@ def new_user_check(user_id):
             ))
             db.session.commit()
         elif data_type == 'sa-sv':
+            app.logger.debug('Adding user check with SELECTED attribute and SELECTED value')
             db.session.add(RadCheck(
                 username=user.username,
                 attribute=form.attribute.data,
@@ -987,6 +1063,7 @@ def new_user_check(user_id):
             return redirect(url_for('new_user_check', user_id=user_id))
         return redirect(url_for('user_details', user_id=user_id))
     elif form.errors:
+        app.logger.debug('Create User Check form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
 
     return render_template(
@@ -1007,6 +1084,7 @@ def new_user_reply(user_id):
         data_type = form.processed_fields.data
 
         if data_type == 'ca-cv':
+            app.logger.debug('Adding user reply with CUSTOM attribute and CUSTOM value')
             db.session.add(RadReply(
                 username=user.username,
                 attribute=form.custom_attribute.data,
@@ -1015,6 +1093,7 @@ def new_user_reply(user_id):
             ))
             db.session.commit()
         elif data_type == 'sa-cv':
+            app.logger.debug('Adding user reply with SELECTED attribute and CUSTOM value')
             db.session.add(RadReply(
                 username=user.username,
                 attribute=form.attribute.data,
@@ -1023,6 +1102,7 @@ def new_user_reply(user_id):
             ))
             db.session.commit()
         elif data_type == 'sa-sv':
+            app.logger.debug('Adding user reply with SELECTED attribute and SELECTED value')
             db.session.add(RadReply(
                 username=user.username,
                 attribute=form.attribute.data,
@@ -1035,6 +1115,7 @@ def new_user_reply(user_id):
             return redirect(url_for('new_user_reply', user_id=user_id))
         return redirect(url_for('user_details', user_id=user_id))
     elif form.errors:
+        app.logger.debug('Create User Reply form errors: %s', form.errors)
         flash(_('Form has errors'), 'error')
 
     return render_template(

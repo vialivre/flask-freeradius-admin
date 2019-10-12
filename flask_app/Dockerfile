@@ -18,6 +18,8 @@ RUN chmod +x boot.sh
 ENV FLASK_APP app.py
 
 RUN chown -R freeradius_admin:freeradius_admin ./
+RUN mkdir /var/log/flask_freeradius_admin
+RUN chown -R freeradius_admin:freeradius_admin /var/log/flask_freeradius_admin
 USER freeradius_admin
 
 EXPOSE 5000
