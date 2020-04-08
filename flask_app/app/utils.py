@@ -100,3 +100,13 @@ def has_access():
             return f(*args, **kwargs)
         return decorated_function
     return decorator
+
+
+def running_on_docker():
+    with open('/proc/self/cgroup', 'r') as procfile:
+        for line in procfile:
+            fields = line.strip().split('/')
+            if fields[1] == 'docker':
+                return True
+
+    return False

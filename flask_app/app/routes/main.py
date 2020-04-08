@@ -1,16 +1,18 @@
 import os.path
+import subprocess
 
 from app import app, db, cache
 from flask import render_template, request, jsonify
 from flask_login import login_required
+from sqlalchemy import event
 
 from app.models.auth import User, Group
 from app.models.radius import (
     RadGroupCheck, RadGroupReply, RadUserGroup,
-    RadCheck
+    RadCheck, Nas
 )
 
-from app.utils import read_dictionary
+from app.utils import read_dictionary, running_on_docker
 
 @app.before_first_request
 def setup():
@@ -80,3 +82,10 @@ def _filter_values():
 
     return jsonify(sorted(values, key=lambda v: v[1]))
     
+@event.listens_for(Nas, 'after_insert')
+def on_insert_nas(mapper, connection, target):
+    ### The Freeradius server must be restarted every time you add a
+    ### new NAS record. If you are using docker, you may need to
+    ### configure a restart policy, such as a cronjob or similar.
+    if not running_on_docker():
+        subprocess.run(["systemctl", "restart", "freeradius.service"])
