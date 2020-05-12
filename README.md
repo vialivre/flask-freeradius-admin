@@ -2,11 +2,13 @@
 
 Flask-FreeRadius-Admin is a visual editor for the FreeRadius server tables. You can use to visualize the FreeRadius authentication flow and edit users, groups and NAS data.
 
-![Users screen](images/users.png){height=300px width=621px}  
-![User edit screen](images/user-edit.png){height=300px width=621px}
-![Groups screen](images/groups.png){height=300px width=621px}  
-![NAS screnn](images/nas.png){height=300px width=621px}  
-![NAS config screen](images/nas-edit.png){height=300px width=621px}  
+<p align="center">
+  <img src="images/users.png" width="600" align="center" />
+  <img src="images/user-edit.png" width="600" align="center" />
+  <img src="images/groups.png" width="600" align="center" />
+  <img src="images/nas.png" width="600" align="center" />
+  <img src="images/nas-edit.png" width="600" align="center" />
+</p>  
 
 ## Installing
 
