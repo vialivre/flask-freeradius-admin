@@ -41,7 +41,7 @@ def index():
 @app.route('/nas')
 @has_access()
 def list_nas():
-    table_headers = ("#", _("Name"), _("Short name"), _("Server"), _("Ports"),
+    table_headers = ("#", _("NAS Name"), _("Short name"), _("Server"), _("Ports"),
                      _("Secret"), _("Type"), _("Community"), _("Description"),
                      _("Actions"))
 
