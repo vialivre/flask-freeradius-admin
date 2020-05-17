@@ -171,32 +171,19 @@ sed -i "9 s/DATABASE_NAME = os.getenv('DATABASE_NAME')/DATABASE_NAME = os.getenv
 
 ```bash
 adduser ffa --shell=/bin/false --no-create-home --disabled-password
-nano /etc/systemd/system/ffa.service
+touch /etc/systemd/system/ffa.service
 ```
 
 ```shell
-#/etc/systemd/system/ffa.service
-[Unit]
-Description = FlaskFreeradiusAdmin
-After = network.target
-
-[Service]
-PermissionsStartOnly = true
-PIDFile = /run/ffa/ffa.pid
-User = ffa
-Group = ffa
-WorkingDirectory = /opt/flask-freeradius-admin/flask_app
-ExecStartPre = /bin/mkdir /run/ffa
-ExecStartPre = /bin/chown -R ffa:ffa /run/ffa
-ExecStart = /usr/bin/env gunicorn3 app:app -b 0.0.0.0:8000 -b [::0]:8000 --pid /run/ffa/ffa.pid --access-logfile /var/log/flask_freeradius_admin/access.log --error-logfile /var/log/flask_freeradius_admin/status.log
-ExecReload = /bin/kill -s HUP $MAINPID
-ExecStop = /bin/kill -s TERM $MAINPID
-ExecStopPost = /bin/rm -rf /run/ffa
-PrivateTmp = true
-Restart = on-failure
-
-[Install]
-WantedBy = multi-user.target
+printf '%s\n' '#/etc/systemd/system/ffa.service' '[Unit]' 'Description = FlaskFreeradiusAdmin' \
+'After = network.target' '' '[Service]' 'PermissionsStartOnly = true' \
+'PIDFile = /run/ffa/ffa.pid' 'User = ffa' 'Group = ffa' \
+'WorkingDirectory = /opt/flask-freeradius-admin/flask_app' \
+'ExecStartPre = /bin/mkdir /run/ffa' 'ExecStartPre = /bin/chown -R ffa:ffa /run/ffa' \
+'ExecStart = /usr/bin/env gunicorn3 app:app -b 0.0.0.0:8000 -b [::0]:8000 --pid /run/ffa/ffa.pid --access-logfile /var/log/flask_freeradius_admin/access.log --error-logfile /var/log/flask_freeradius_admin/status.log' \
+'ExecReload = /bin/kill -s HUP $MAINPID' 'ExecStop = /bin/kill -s TERM $MAINPID' \
+'ExecStopPost = /bin/rm -rf /run/ffa' 'PrivateTmp = true' 'Restart = on-failure' \
+'' '[Install]' 'WantedBy = multi-user.target' | tee -a /etc/systemd/system/ffa.service
 ```
 
 ```bash
