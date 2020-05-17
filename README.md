@@ -58,7 +58,7 @@ docker ps
 docker exec -it {container_id} /bin/sh
 ```
 
-# STANDALONE USE
+## STANDALONE USE
 
 If you want execute in standalone mode, bellow instructions, using Ubuntu Server 18.04
 
