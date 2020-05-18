@@ -171,7 +171,6 @@ sed -i "9 s/DATABASE_NAME = os.getenv('DATABASE_NAME')/DATABASE_NAME = os.getenv
 
 ```bash
 adduser ffa --shell=/bin/false --no-create-home --disabled-password
-touch /etc/systemd/system/ffa.service
 ```
 
 ```shell
