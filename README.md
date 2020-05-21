@@ -27,7 +27,7 @@ apt install docker docker-compose
 
 2. Clone the repository
 ```
-git clone https://github.com/juliarizza/flask-freeradius-admin.git
+git clone https://github.com/vialivre/flask-freeradius-admin
 ```
 
 3. Enter the project
