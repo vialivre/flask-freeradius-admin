@@ -7,7 +7,7 @@ DATABASE_PORT = os.getenv('DATABASE_PORT', '5432')
 DATABASE_USER = os.getenv('DATABASE_USER')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
 DATABASE_NAME = os.getenv('DATABASE_NAME')
-DB_URI = 'postgresql+psycopg2://{user}:{psswd}@{server}:{port}/{db}'.format(
+DB_URI = 'postgresql+psycopg2://{user}:{psswd}@{server}:{port}/{db}?client_encoding=utf-8'.format(
     user=DATABASE_USER,
     psswd=DATABASE_PASSWORD,
     server=DATABASE_SERVER,
