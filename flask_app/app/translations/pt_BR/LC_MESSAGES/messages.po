@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: CONTATO@JULIARIZZA.COM\n"
 "POT-Creation-Date: 2019-09-22 11:38-0300\n"
-"PO-Revision-Date: 2020-05-14 08:18-0300\n"
+"PO-Revision-Date: 2020-06-18 15:55-0300\n"
 "Last-Translator: Sergio Souza <sergio@soho.eti.br>\n"
 "Language: pt_BR\n"
 "Language-Team: pt_BR\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.3\n"
 
 #: app/__init__.py:21
 msgid "Please login to access this page."
@@ -26,7 +26,7 @@ msgstr "Por favor, faça login para acessar essa página."
 
 #: app/forms/auth.py:12
 msgid "Username or Email"
-msgstr "Nome de Usuário ou Email"
+msgstr "Nome do usuário ou e-mail"
 
 #: app/forms/auth.py:13 app/forms/auth.py:17 app/forms/radius.py:31
 #: app/forms/radius.py:41 app/forms/radius.py:45 app/forms/radius.py:57
@@ -41,11 +41,11 @@ msgstr "Senha"
 
 #: app/forms/auth.py:19
 msgid "Remember me"
-msgstr "Lembrar-me"
+msgstr "Lembrar acesso"
 
 #: app/forms/auth.py:20
 msgid "Login to Dashboard"
-msgstr "Acesso a Dashboard"
+msgstr "Acesso ao painel"
 
 #: app/forms/radius.py:30
 msgid "NAS Name"
@@ -86,7 +86,7 @@ msgstr "Enviar"
 
 #: app/forms/radius.py:56 app/routes/radius.py:130
 msgid "Group Name"
-msgstr "Nome do Grupo"
+msgstr "Nome do grupo"
 
 #: app/forms/radius.py:65 app/routes/radius.py:374
 #: app/templates/radius/dashboard.html:10
@@ -95,7 +95,7 @@ msgstr "Usuário"
 
 #: app/forms/radius.py:68
 msgid "Email"
-msgstr "E-mail"
+msgstr "e-Mail"
 
 #: app/forms/radius.py:70 app/templates/radius/user_form.html:77
 msgid "Active"
@@ -183,11 +183,11 @@ msgstr "Dados do NAS atualizados"
 
 #: app/routes/radius.py:131 app/routes/radius.py:375
 msgid "Checks Count"
-msgstr "Contador de verificações"
+msgstr "Atributos de verificação"
 
 #: app/routes/radius.py:131 app/routes/radius.py:375
 msgid "Replies Count"
-msgstr "Contador de respostas"
+msgstr "Atributos de resposta"
 
 #: app/routes/radius.py:163
 msgid "New group added"
@@ -247,7 +247,7 @@ msgstr "Por favor, realize o login na sua conta."
 
 #: app/templates/auth/login.html:40
 msgid "Username or email"
-msgstr "Nome de usuário ou email"
+msgstr "Nome do usuário ou e-mail"
 
 #: app/templates/auth/login.html:52
 msgid "Keep me logged in"
